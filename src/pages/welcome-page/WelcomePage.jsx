@@ -30,14 +30,16 @@ function WelcomePage() {
 		 </div>
 
 		 <div className="welcome-page__buttons">
-			<button onClick={() => navigate("/sign-up")} className="welcome-page__button sign-up-btn">Kayıt Ol</button>
-			<button onClick={() => navigate("/sign-in")} className="welcome-page__button sign-in-btn">Giriş Yap</button>
+		 	<button onClick={() => navigate("/sign-up")} className="welcome-page__button sign-up-btn">
+				<i className="bi-person-plus-fill"></i> Kayıt Ol
+			</button>
+			<button onClick={() => navigate("/sign-in")} className="welcome-page__button sign-in-btn">
+				<i className="bi-box-arrow-in-right"></i> Giriş Yap
+			</button>
 		 </div>
 		 <Footer />
 	  </div>
 	);
 }
-
- 
 
 export default WelcomePage;
