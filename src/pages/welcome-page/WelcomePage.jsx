@@ -1,68 +1,43 @@
 import React from "react";
 import "./welcome-page.css";
-import ThumbsDownImage from "../../assets/images/thumbs-down.png";
-import ThumbsUpImage from "../../assets/images/thumbs-up.png";
-import CalendarImage from "../../assets/images/calendar.png";
-import Heading from "../../components/heading/Heading";
-import Button from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header/header";
+import Footer from "../../components/footer/footer";
 
 function WelcomePage() {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  return (
-    <div className="welcome-page">
-      <Heading
-        images={[
-          {
-            src: ThumbsDownImage,
-            alt: "Thumbs Down",
-          },
-          {
-            src: ThumbsUpImage,
-            alt: "Thumbs Up",
-          },
-          {
-            src: CalendarImage,
-            alt: "Calendar",
-          },
-        ]}
-        title={"Farketmez"}
-        type={"gradient"}
-      />
+	return (
+	  <div className="welcome-page">
+		 <Header />
+		 <h1 className="welcome-page__title">Etkinlikleri Kolayca Planlayın ve Keşfedin!</h1>
+		 
+		 <div className="welcome-page__content">
+			<div className="welcome-page__icon-container">
+			  <i className="bi-pencil-square welcome-page__icon" style={{color: "#FFA500"}}></i>
+			  <p>Etkinlikleri düzenlemek, katılmak ve keşfetmek için mükemmel bir platform</p>
+			</div>
 
-      <div className="welcome-page__content">
-        <div className="welcome-page__content__title">
-          <h3 className="welcome-page__content__title__text">
-            Kararsızlığını Yönet
-          </h3>
+			<div className="welcome-page__icon-container">
+			  <i className="bi-geo-alt welcome-page__icon" style={{color: "#4da5fe"}}></i>
+			  <p>Konum taraması sayesinde yakındaki etkinlikleri kolayca keşfet</p>
+			</div>
 
-          <p className="welcome-page__content__title__description">
-            Başkalarının puanlayıp değerlendirdiği etkinlik seçeneklerini
-            keşfet. Hoşuna giden fikirleri diğerleriyle paylaş!
-          </p>
-        </div>
+			<div className="welcome-page__icon-container">
+			  <i className="bi-calendar welcome-page__icon" style={{color: "#8B008B"}}></i>
+			  <p>Etkinliklerinizi organize etmek ve davetiyeler oluşturmak çok basit</p>
+			</div>
+		 </div>
 
-        <div className="welcome-page__content__buttons">
-          <Button
-            onClick={() => navigate("/sign-up")}
-            type="secondary"
-            customClassname={"welcome-page__content__button"}
-          >
-            <span>Kayıt Ol</span>
-          </Button>
-
-          <Button
-            onClick={() => navigate("/sign-in")}
-            type="primary"
-            customClassname={"welcome-page__content__button"}
-          >
-            <span>Giriş Yap</span>
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+		 <div className="welcome-page__buttons">
+			<button onClick={() => navigate("/sign-up")} className="welcome-page__button sign-up-btn">Kayıt Ol</button>
+			<button onClick={() => navigate("/sign-in")} className="welcome-page__button sign-in-btn">Giriş Yap</button>
+		 </div>
+		 <Footer />
+	  </div>
+	);
 }
+
+ 
 
 export default WelcomePage;
