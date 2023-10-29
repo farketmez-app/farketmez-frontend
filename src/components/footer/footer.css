@@ -4,12 +4,13 @@ footer {
 	align-items: center;
 	background-color: #140034; 
 	padding: 1rem 2rem;
-	position: absolute;
 	bottom: 0;
 	left: 0; 
 	width: 100%;
 	box-shadow: 0px -4px 12px rgba(20, 230, 212, 0.1);
 	box-sizing: border-box;  
+	flex-shrink: 0;
+	position: absolute;
  }
  
  footer p {
