@@ -4,7 +4,7 @@ import './footer.css';
 function Footer() {
   return (
     <footer>
-      <p>© 2023-2024 Yılı bitirme projesi kapsamında hazırlanmıştır ve telif hakları saklıdır. İzinsiz kullanımı yasaktır.</p>
+      <p>© 2023-2024 Güz dönemi bitirme projesi kapsamında hazırlanmıştır ve telif hakları saklıdır. İzinsiz kullanımı yasaktır.</p>
     </footer>
   );
 }
