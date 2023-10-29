@@ -1,0 +1,53 @@
+.welcome-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-page__content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+}
+
+.welcome-page__content__title {
+  flex: 1;
+  text-align: center;
+}
+
+.welcome-page__content__title__text {
+  color: #353535;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.welcome-page__content__title__description {
+  color: #353535;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 23px;
+}
+
+.welcome-page__content__buttons {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  gap: 10px;
+}
+
+.welcome-page__content__button {
+  flex: 1;
+}
