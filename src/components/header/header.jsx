@@ -11,7 +11,7 @@ function Header() {
 			Fark Etmez
 			</div>
 			<button className="header-button" onClick={() => navigate("/sign-in")}>
-				<i class="bi bi-door-open"></i> Giriş Yap
+				<i className="bi-box-arrow-in-right"></i> Giriş Yap
 			</button>
         </header>
     );
