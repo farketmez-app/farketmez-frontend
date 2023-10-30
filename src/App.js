@@ -9,6 +9,8 @@ import NewActivityPage from "./pages/new-activity-page/NewActivityPage";
 import ResultPage from "./pages/result-page/ResultPage";
 import RateActivityPage from "./pages/rate-activity-page/RateActivityPage";
 import { AppProvider } from "./context/AppContext";
+import { ModalProvider } from "./context/ModalContext";
+import FarketmezModal from "./components/farketmez-modal/FarketmezModal";
 
 function App() {
   const router = createBrowserRouter([
@@ -53,7 +55,11 @@ function App() {
   return (
     <div className="App">
       <AppProvider>
-        <RouterProvider router={router} />
+        <ModalProvider>
+          <RouterProvider router={router} />
+
+          <FarketmezModal />
+        </ModalProvider>
       </AppProvider>
     </div>
   );
