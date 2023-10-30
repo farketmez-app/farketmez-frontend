@@ -1,0 +1,74 @@
+.farketmez-modal {
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  max-height: 600px;
+  background-color: #f8f8f8;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: farketmez-modal__animation 0.3s ease-in-out;
+}
+
+@keyframes farketmez-modal__animation {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.farketmez-modal__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.farketmez-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.farketmez-modal__logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.farketmez-modal__body {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.farketmez-modal__overlay {
+  position: fixed;
+  top: 0;
+  backdrop-filter: blur(5px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
