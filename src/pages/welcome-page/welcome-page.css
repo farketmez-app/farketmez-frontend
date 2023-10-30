@@ -1,53 +1,83 @@
 .welcome-page {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;  
+	justify-content: space-between; 
+ }
 
+.welcome-page__title {
+	font-size: 2.5rem;
+	margin-bottom: 2rem;
+	margin-top: 2rem;
+}
+ 
+.welcome-page__icon-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 350px;
+	height: 250px;
+	border-radius: 20px;
+	background-color: white;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	margin: 1rem;
+	text-align: center;
+	margin-top: 80px;
+}
+ 
+.welcome-page__icon {
+	font-size: 2.5rem;
+	margin-bottom: 1.5rem;
+}
+ 
 .welcome-page__content {
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50px;
+	display: flex;
+	flex: 1 0 auto; 
+	justify-content: space-between;
 }
 
-.welcome-page__content__title {
-  flex: 1;
-  text-align: center;
+.sign-in-btn {
+	background-color: #6741d9;
+	color: white;
+}
+ 
+.sign-up-btn {
+	background-color: white;
+	color: #6741d9;
+	border: 1px solid #6741d9;
+	margin-right: 1rem;
+}
+.sign-in-btn:hover, .sign-up-btn:hover {
+	background-color: #5e0b77; 
+	color: white;
+}
+ 
+.welcome-page__button {
+	padding: 0.5rem 1rem;
+	font-size: 1.5rem;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+	margin: 1rem 0.5rem;
+	margin-top: 50px;
 }
 
-.welcome-page__content__title__text {
-  color: #353535;
-  text-align: center;
-  font-family: Roboto;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-
-.welcome-page__content__title__description {
-  color: #353535;
-  text-align: center;
-  font-family: Roboto;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-top: 23px;
-}
-
-.welcome-page__content__buttons {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin-top: 40px;
-  gap: 10px;
-}
-
-.welcome-page__content__button {
-  flex: 1;
+@media (max-width: 768px) {
+	.welcome-page__content {
+	  flex-direction: column;
+	  align-items: center;
+	}
+ 
+	.welcome-page__buttons {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	}
+ 
+	.sign-up-btn, .sign-in-btn {
+	  margin: 0.5rem 0; 
+ }
 }
