@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import "./main-page.css";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header/header";
+import Footer from "../../components/footer/footer";
 
 function MainPage() {
   const { state, dispatch } = React.useContext(AppContext);
@@ -13,7 +15,13 @@ function MainPage() {
     }
   }, [state.user, navigate]);
 
-  return <div>MainPage</div>;
+  return (
+	<div>
+	  <Header />
+	  MainPage
+	  <Footer/>
+	</div>
+ );
 }
 
 export default MainPage;
