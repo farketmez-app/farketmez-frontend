@@ -1,59 +1,69 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import WelcomePage from "./pages/welcome-page/WelcomePage";
-import SignInPage from "./pages/sign-in-page/SignInPage";
-import SignUpPage from "./pages/sign-up-page/SignUpPage";
-import MainPage from "./pages/main-page/MainPage";
-import ActivitiesListPage from "./pages/activities-list-page/ActivitiesListPage";
-import NewActivityPage from "./pages/new-activity-page/NewActivityPage";
-import ResultPage from "./pages/result-page/ResultPage";
-import RateActivityPage from "./pages/rate-activity-page/RateActivityPage";
 import { AppProvider } from "./context/AppContext";
+
+// pages
+import WelcomePage from "./pages/welcome-page/WelcomePage";
+import ScheduleEventPage from "./pages/schedule-event-page/ScheduleEventPage";
+import MyEventsPage from "./pages/my-events-page/MyEventsPage";
+import PublicEventsPage from "./pages/public-events-page/PublicEventsPage";
+import NearEventsPage from "./pages/near-events-page/NearEventsPage";
+import AttendedEventsPage from "./pages/attended-events-page/AttendedEventsPage";
+// components
+import MainLayoutWithPadding from "./layouts/main-layout-with-padding/MainLayoutWithPadding";
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/welcome",
+      path: "/",
       element: <WelcomePage />,
     },
     {
-      path: "/sign-in",
-      element: <SignInPage />,
+      path: "/schedule-event",
+      element: (
+        <MainLayoutWithPadding>
+          <ScheduleEventPage />
+        </MainLayoutWithPadding>
+      ),
     },
     {
-      path: "/sign-up",
-      element: <SignUpPage />,
+      path: "/my-events",
+      element: (
+        <MainLayoutWithPadding>
+          <MyEventsPage />
+        </MainLayoutWithPadding>
+      ),
     },
     {
-      path: "/",
-      element: <MainPage />,
+      path: "/public-events",
+      element: (
+        <MainLayoutWithPadding>
+          <PublicEventsPage />
+        </MainLayoutWithPadding>
+      ),
     },
     {
-      path: "/my-own-activities",
-      element: <ActivitiesListPage list={"my-own"} />,
+      path: "/near-events",
+      element: (
+        <MainLayoutWithPadding>
+          <NearEventsPage />
+        </MainLayoutWithPadding>
+      ),
     },
     {
-      path: "/system-activities",
-      element: <ActivitiesListPage list={"system"} />,
-    },
-    {
-      path: "/add-new-activity",
-      element: <NewActivityPage />,
-    },
-    {
-      path: "/result",
-      element: <ResultPage />,
-    },
-    {
-      path: "/rate-activity/:id",
-      element: <RateActivityPage />,
+      path: "/attended-events",
+      element: (
+        <MainLayoutWithPadding>
+          <AttendedEventsPage />
+        </MainLayoutWithPadding>
+      ),
     },
   ]);
 
   return (
     <div className="App">
       <AppProvider>
-        <RouterProvider router={router} />
+          <RouterProvider router={router} />
       </AppProvider>
     </div>
   );
