@@ -10,7 +10,7 @@ import PublicEventsPage from "./pages/public-events-page/PublicEventsPage";
 import NearEventsPage from "./pages/near-events-page/NearEventsPage";
 import AttendedEventsPage from "./pages/attended-events-page/AttendedEventsPage";
 // components
-import MainLayoutWithPadding from "./layouts/main-layout-with-padding/MainLayoutWithPadding";
+import MainLayout from "./layouts/main-layout/MainLayout";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,41 +21,41 @@ function App() {
     {
       path: "/schedule-event",
       element: (
-        <MainLayoutWithPadding>
+        <MainLayout>
           <ScheduleEventPage />
-        </MainLayoutWithPadding>
+        </MainLayout>
       ),
     },
     {
       path: "/my-events",
       element: (
-        <MainLayoutWithPadding>
+        <MainLayout>
           <MyEventsPage />
-        </MainLayoutWithPadding>
+        </MainLayout>
       ),
     },
     {
       path: "/public-events",
       element: (
-        <MainLayoutWithPadding>
+        <MainLayout>
           <PublicEventsPage />
-        </MainLayoutWithPadding>
+        </MainLayout>
       ),
     },
     {
       path: "/near-events",
       element: (
-        <MainLayoutWithPadding>
+        <MainLayout hasPadding={false}>
           <NearEventsPage />
-        </MainLayoutWithPadding>
+        </MainLayout>
       ),
     },
     {
       path: "/attended-events",
       element: (
-        <MainLayoutWithPadding>
+        <MainLayout>
           <AttendedEventsPage />
-        </MainLayoutWithPadding>
+        </MainLayout>
       ),
     },
   ]);
@@ -63,7 +63,7 @@ function App() {
   return (
     <div className="App">
       <AppProvider>
-          <RouterProvider router={router} />
+        <RouterProvider router={router} />
       </AppProvider>
     </div>
   );

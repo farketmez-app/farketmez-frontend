@@ -1,0 +1,7 @@
+
+.main-layout .main-layout__content {
+}
+
+.main-layout--with-padding .main-layout__content {
+    padding: 20px 20%;
+}
