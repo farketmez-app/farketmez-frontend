@@ -1,0 +1,20 @@
+.event-comment-skeleton {
+  width: 100%;
+  height: 74px;
+  animation: skeleton-background-color 1.5s ease-in-out infinite;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.event-comment-skeleton:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes skeleton-background-color {
+  0% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f5f5f5;
+  }
+}
