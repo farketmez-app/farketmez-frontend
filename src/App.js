@@ -1,7 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import WelcomePage from "./pages/welcome-page/WelcomePage";
-import SignInPage from "./pages/sign-in-page/SignInPage";
 import SignUpPage from "./pages/sign-up-page/SignUpPage";
 import MainPage from "./pages/main-page/MainPage";
 import ActivitiesListPage from "./pages/activities-list-page/ActivitiesListPage";
@@ -17,10 +16,6 @@ function App() {
     {
       path: "/welcome",
       element: <WelcomePage />,
-    },
-    {
-      path: "/sign-in",
-      element: <SignInPage />,
     },
     {
       path: "/sign-up",
