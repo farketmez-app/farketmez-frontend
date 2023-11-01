@@ -1,0 +1,59 @@
+.plain-event-preview {
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 8px -2px rgba(0, 0, 0, 0.13);
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.plain-event-preview:hover {
+  box-shadow: 0px 0px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+.plain-event-preview:hover .plain-event-preview__image {
+  transform: scale(1.04);
+}
+
+.plain-event-preview__container {
+  display: flex;
+  height: 100px;
+}
+
+.plain-event-preview__image {
+  flex: 1;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.plain-event-preview__content {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.plain-event-preview__title {
+  font-weight: 700;
+}
+
+.plain-event-preview__where-and-cost-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  align-self: flex-end;
+}
+
+.plain-event-preview__where-and-cost-info-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.plain-event-preview__where-and-cost-info-icon {
+  width: 20px;
+  height: 20px;
+}
