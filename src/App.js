@@ -1,52 +1,62 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import WelcomePage from "./pages/welcome-page/WelcomePage";
-import SignInPage from "./pages/sign-in-page/SignInPage";
-import SignUpPage from "./pages/sign-up-page/SignUpPage";
-import MainPage from "./pages/main-page/MainPage";
-import ActivitiesListPage from "./pages/activities-list-page/ActivitiesListPage";
-import NewActivityPage from "./pages/new-activity-page/NewActivityPage";
-import ResultPage from "./pages/result-page/ResultPage";
-import RateActivityPage from "./pages/rate-activity-page/RateActivityPage";
 import { AppProvider } from "./context/AppContext";
+
+// pages
+import WelcomePage from "./pages/welcome-page/WelcomePage";
+import ScheduleEventPage from "./pages/schedule-event-page/ScheduleEventPage";
+import MyEventsPage from "./pages/my-events-page/MyEventsPage";
+import PublicEventsPage from "./pages/public-events-page/PublicEventsPage";
+import NearEventsPage from "./pages/near-events-page/NearEventsPage";
+import AttendedEventsPage from "./pages/attended-events-page/AttendedEventsPage";
+// components
+import MainLayout from "./layouts/main-layout/MainLayout";
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/welcome",
+      path: "/",
       element: <WelcomePage />,
     },
     {
-      path: "/sign-in",
-      element: <SignInPage />,
+      path: "/schedule-event",
+      element: (
+        <MainLayout>
+          <ScheduleEventPage />
+        </MainLayout>
+      ),
     },
     {
-      path: "/sign-up",
-      element: <SignUpPage />,
+      path: "/my-events",
+      element: (
+        <MainLayout>
+          <MyEventsPage />
+        </MainLayout>
+      ),
     },
     {
-      path: "/",
-      element: <MainPage />,
+      path: "/public-events",
+      element: (
+        <MainLayout>
+          <PublicEventsPage />
+        </MainLayout>
+      ),
     },
     {
-      path: "/my-own-activities",
-      element: <ActivitiesListPage list={"my-own"} />,
+      path: "/near-events",
+      element: (
+        <MainLayout hasPadding={false}>
+          <NearEventsPage />
+        </MainLayout>
+      ),
     },
     {
-      path: "/system-activities",
-      element: <ActivitiesListPage list={"system"} />,
-    },
-    {
-      path: "/add-new-activity",
-      element: <NewActivityPage />,
-    },
-    {
-      path: "/result",
-      element: <ResultPage />,
-    },
-    {
-      path: "/rate-activity/:id",
-      element: <RateActivityPage />,
+      path: "/attended-events",
+      element: (
+        <MainLayout>
+          <AttendedEventsPage />
+        </MainLayout>
+      ),
     },
   ]);
 
