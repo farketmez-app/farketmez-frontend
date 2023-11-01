@@ -1,6 +1,9 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import { AppProvider } from "./context/AppContext";
+import { ModalProvider } from "./context/ModalContext";
+import FarketmezModal from "./components/farketmez-modal/FarketmezModal";
 
 // pages
 import WelcomePage from "./pages/welcome-page/WelcomePage";
@@ -63,7 +66,11 @@ function App() {
   return (
     <div className="App">
       <AppProvider>
-        <RouterProvider router={router} />
+        <ModalProvider>
+          <RouterProvider router={router} />
+
+          <FarketmezModal />
+        </ModalProvider>
       </AppProvider>
     </div>
   );
