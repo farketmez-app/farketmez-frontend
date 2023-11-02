@@ -1,7 +1,14 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
 
 .main-layout .main-layout__content {
+    flex:1;
 }
 
 .main-layout--with-padding .main-layout__content {
-    padding: 20px 20%;
+  padding: 20px 20%;
 }

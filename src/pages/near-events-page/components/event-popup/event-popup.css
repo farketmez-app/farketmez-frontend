@@ -1,0 +1,28 @@
+.event-popup {
+  position: absolute;
+  background-color: white;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 40%;
+  z-index: 1000;
+  box-shadow: 0px 50px 10px rgba(0, 0, 0, 0.1);
+  animation: fade-in-event 0.5s ease-in-out;
+
+  overflow-y: scroll;
+}
+
+.event-popup__title {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+@keyframes fade-in-event {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
