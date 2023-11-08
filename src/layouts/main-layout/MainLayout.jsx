@@ -3,7 +3,11 @@ import "./main-layout.css";
 import Header from "../../components/header/header";
 import PageSwitcher from "../components/page-switcher/PageSwitcher";
 
-function MainLayoutWithPadding({ children, hasPadding = true }) {
+function MainLayoutWithPadding({
+  children,
+  hasPadding = true,
+  shouldShowSwitcher = true,
+}) {
   return (
     <div
       className={`main-layout 
@@ -11,7 +15,7 @@ function MainLayoutWithPadding({ children, hasPadding = true }) {
     `}
     >
       <Header />
-      <PageSwitcher />
+      {shouldShowSwitcher && <PageSwitcher />}
 
       <div className="main-layout__content">{children}</div>
     </div>

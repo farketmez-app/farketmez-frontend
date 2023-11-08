@@ -1,0 +1,46 @@
+.account-dropdown {
+  position: absolute;
+  top: 100px;
+  right: 8px;
+  width: 300px;
+
+  background-color: #140034;
+  border-radius: 10px;
+  padding: 10px;
+
+  animation: account-dropdown-fade-in 0.3s ease-in-out;
+}
+
+@keyframes account-dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.account-dropdown__option {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.account-dropdown__option:last-child {
+  margin-bottom: 0;
+}
+
+.account-dropdown__option:hover {
+  background-color: #2d1752;
+}
+
+.account-dropdown__icon {
+  margin-right: 10px;
+}
