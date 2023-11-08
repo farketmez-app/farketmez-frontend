@@ -11,29 +11,45 @@ function WelcomePage() {
   const { dispatch } = useContext(ModalContext);
 
   function handleOpenSignInModal() {
-	dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-	dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
-	dispatch({ 
-	  type: "SET_MODAL_CONTENT", 
-	  payload: <SignInForm onClose={() => dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })} />
-	});
-	dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true }); 
- }
- function handleOpenSignUpModal() {
-	dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-	dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
-	dispatch({ 
-	  type: "SET_MODAL_CONTENT", 
-	  payload: <SignUpForm onClose={() => dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })} />
-	});
-	dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true }); 
- }
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <SignInForm
+          onClose={() =>
+            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
+          }
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
+  }
+  function handleOpenSignUpModal() {
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <SignUpForm
+          onClose={() =>
+            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
+          }
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
+  }
   return (
     <div className="welcome-page">
       <Header />
-      <h1 className="welcome-page__title">
-        Etkinlikleri Kolayca Planlayın ve Keşfedin!
-      </h1>
+      <div className="welcome-page__title">
+        <h1 className="welcome-page__title-text">Etkinlikleri</h1>
+
+        <h1 className="welcome-page__title-text">Kolayca Planlayın</h1>
+
+        <h1 className="welcome-page__title-text">ve Keşfedin!</h1>
+      </div>
 
       <div className="welcome-page__content">
         <div className="welcome-page__icon-container">
