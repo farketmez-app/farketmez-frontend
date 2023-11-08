@@ -1,0 +1,79 @@
+.container {
+	background-color: #fff; 
+	border-radius: 8px; 
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	padding: 20px; 
+	max-width: 400px; 
+	margin: auto;
+}
+
+.btn {
+	display: block;
+	width: 100%; 
+	padding: .375rem .75rem; 
+	font-size: 1rem; 
+	line-height: 1.5; 
+	border-radius: .25rem; 
+	margin-bottom: .5rem;
+	text-align: center;
+	cursor: pointer; 
+	transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Geçiş efekti */
+}
+
+.btn-primary {
+	background-color: #6C63FF; 
+	border-color: #6C63FF;
+	color: #fff; 
+}
+
+.btn-primary:focus, .btn-primary:hover {
+	background-color: darken(#6C63FF, 10%); 
+	border-color: darken(#6C63FF, 10%);
+}
+
+.btn-light {
+	background-color: #f8f9fa; 
+	color: #333; 
+	border-color: #ced4da; 
+}
+
+.btn-light:focus, .btn-light:hover {
+	background-color: darken(#f8f9fa, 10%); 
+	border-color: darken(#ced4da, 10%);
+}
+
+.form-control, .form-select {
+	display: block;
+	width: 100%; 
+	padding: .375rem .75rem; 
+	font-size: 1rem; 
+	line-height: 1.5;
+	color: #495057; 
+	background-color: #fff;
+	border: 1px solid #ced4da; 
+	border-radius: .25rem;
+	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Geçiş efekti */
+}
+
+.form-control:focus, .form-select:focus {
+	border-color: #6C63FF;
+	box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, .25);
+}
+
+.btn-back {
+	color: #6C63FF;
+	text-decoration: none; 
+	padding: .375rem .75rem; 
+	border: none; 
+	background: none;
+}
+
+.btn-back:hover {
+	text-decoration: underline;
+}
+
+.text-primary {
+	cursor: 'pointer';
+	text-decoration: underline;
+	color: #6C63FF;
+}

@@ -19,7 +19,7 @@ function WelcomePage() {
 	});
 	dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true }); 
  }
- function handleOpenSignUpodal() {
+ function handleOpenSignUpModal() {
 	dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
 	dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
 	dispatch({ 
@@ -68,17 +68,17 @@ function WelcomePage() {
 
       <div className="welcome-page__buttons">
         <button
-          onClick={() => navigate("/sign-up")}
+          onClick={handleOpenSignUpModal}
           className="welcome-page__button sign-up-btn"
         >
           <i className="bi-person-plus-fill"></i> Kayıt Ol
         </button>
-		  <button
-			onClick={handleOpenSignInModal}
-			className="welcome-page__button sign-in-btn"
-		>
-			<i className="bi-box-arrow-in-right"></i> Giriş Yap
-		</button>
+        <button
+          onClick={handleOpenSignInModal}
+          className="welcome-page__button sign-in-btn"
+        >
+          <i className="bi-box-arrow-in-right"></i> Giriş Yap
+        </button>
       </div>
       <Footer />
     </div>

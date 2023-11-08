@@ -74,12 +74,13 @@ input[type="text"], input[type="password"] {
 	cursor: pointer;
 }
 button {
-	padding: 10px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 14px;
-	margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px; 
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease; 
 }
 
 .signin-email-btn,
