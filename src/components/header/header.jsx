@@ -1,20 +1,43 @@
-import React from 'react';
-import { useNavigate } from "react-router-dom";
-import './header.css';
+import React, { useContext } from "react";
+import "./header.css";
+import { ModalContext } from "../../context/ModalContext";
+import SignInForm from "../SignIn/SignInForm";
 
 function Header() {
-	const navigate = useNavigate();
-    return (
-        <header className="header">
-			<div className="header_logo">
-			<img src="/favicon.ico" alt="Farketmez Logo" className="header_favicon" />
-			Fark Etmez
-			</div>
-			<button className="header-button" onClick={() => navigate("/sign-in")}>
-				<i className="bi-box-arrow-in-right"></i> Giriş Yap
-			</button>
-        </header>
-    );
+  const { dispatch } = useContext(ModalContext);
+
+  function handleOpenSignInModal() {
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <SignInForm
+          onClose={() =>
+            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
+          }
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
+  }
+
+  return (
+    <header className="header">
+      <div className="header_logo">
+        <img
+          src="/favicon.ico"
+          alt="Farketmez Logo"
+          className="header_favicon"
+        />
+        Fark Etmez
+      </div>
+	  
+      <button className="header-button" onClick={handleOpenSignInModal}>
+        <i className="bi-box-arrow-in-right"></i> Giriş Yap
+      </button>
+    </header>
+  );
 }
 
 export default Header;
