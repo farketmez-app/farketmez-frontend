@@ -87,6 +87,9 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
 		  <div className="mt-3 text-center">
 			Hesabın var mı? <span className="text-primary" onClick={handleSignInLinkClick} style={{ cursor: 'pointer', textDecoration:'underline', color:'purple'}}>Giriş Yap</span>
 		 </div>
+		 <div className="d-grid gap-2">
+          <button className="btn btn-primary">Kaydol</button>
+        </div>
       </div>
     </>
   );
