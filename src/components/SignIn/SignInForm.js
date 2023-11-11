@@ -29,37 +29,7 @@ const SignInForm = () => {
     });
     dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
   };
-  const handleSignUpLinkClick = () => {
-    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-    dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
-    dispatch({
-      type: "SET_MODAL_CONTENT",
-      payload: (
-        <SignUpForm
-          onClose={() =>
-            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
-          }
-        />
-      ),
-    });
-    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
-  };
 
-  const handleForgotPasswordClick = () => {
-    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-    dispatch({ type: "SET_MODAL_TITLE", payload: "Şifre Yenileme" });
-    dispatch({
-      type: "SET_MODAL_CONTENT",
-      payload: (
-        <PasswordResetForm
-          onClose={() =>
-            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
-          }
-        />
-      ),
-    });
-    setShowPasswordReset(true);
-  };
   const handleForgotPasswordClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Şifre Yenileme" });
@@ -97,15 +67,6 @@ const SignInForm = () => {
 };
 
 const ButtonSignIn = ({ setShowEmailSignIn, onSignUpClick }) => {
-  return (
-    <>
-      <div className="d-grid gap-2">
-        <button
-          className="btn btn-primary"
-          onClick={() => setShowEmailSignIn(true)}
-        >
-          <EnvelopeFill /> E-posta ile giriş yap
-        </button>
   return (
     <>
       <div className="d-grid gap-2">
