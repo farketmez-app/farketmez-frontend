@@ -7,10 +7,6 @@ import PasswordResetForm from "../PasswordReset/PasswordResetForm";
 import Input from "../input/Input";
 const SignInForm = () => {
   const { dispatch } = useContext(ModalContext);
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
   const [showEmailSignIn, setShowEmailSignIn] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
 
