@@ -1,0 +1,60 @@
+.input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.input__inner-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  outline: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #292929;
+  background-color: #efefef;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 16px;
+}
+
+.input:focus {
+  outline: 2px solid #6200ff8b;
+  outline-offset: 2px;
+}
+
+.input::placeholder {
+  color: #8f8f8f;
+}
+
+.input__show-password-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: auto;
+  padding: 0 10px;
+  height: 46px;
+  width: 46px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.input__show-password-button:hover {
+  color: #000;
+}
+
+.input__show-password-button:focus {
+  outline: none;
+}
