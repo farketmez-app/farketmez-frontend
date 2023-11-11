@@ -1,0 +1,34 @@
+.simple-dropdown-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.simple-dropdown-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.simple-dropdown {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  outline: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #292929;
+  background-color: #efefef;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.simple-dropdown::-ms-expand {
+  display: none;
+}
+
+.simple-dropdown:focus {
+  outline: 2px solid #6200ff8b;
+  outline-offset: 2px;
+}
