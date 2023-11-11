@@ -14,6 +14,8 @@ import NearEventsPage from "./pages/near-events-page/NearEventsPage";
 import AttendedEventsPage from "./pages/attended-events-page/AttendedEventsPage";
 // components
 import MainLayout from "./layouts/main-layout/MainLayout";
+import { DropdownProvider } from "./context/DropdownContext";
+import AccountSettingsPage from "./pages/account-settings-page/AccountSettingsPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -56,8 +58,16 @@ function App() {
     {
       path: "/attended-events",
       element: (
-        <MainLayout>
+        <MainLayout shouldShowSwitcher={false}>
           <AttendedEventsPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/account-settings",
+      element: (
+        <MainLayout shouldShowSwitcher={false}>
+          <AccountSettingsPage />
         </MainLayout>
       ),
     },
@@ -66,11 +76,13 @@ function App() {
   return (
     <div className="App">
       <AppProvider>
-        <ModalProvider>
-          <RouterProvider router={router} />
+        <DropdownProvider>
+          <ModalProvider>
+            <RouterProvider router={router} />
 
-          <FarketmezModal />
-        </ModalProvider>
+            <FarketmezModal />
+          </ModalProvider>
+        </DropdownProvider>
       </AppProvider>
     </div>
   );
