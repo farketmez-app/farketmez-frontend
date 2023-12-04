@@ -4,6 +4,7 @@ import { ModalContext } from "../../context/ModalContext";
 import SignUpForm from "../SignUp/SignUpForm";
 import "./SignInForm.css";
 import PasswordResetForm from "../PasswordReset/PasswordResetForm";
+import Input from "../input/Input";
 const SignInForm = () => {
   const { dispatch } = useContext(ModalContext);
   const [showEmailSignIn, setShowEmailSignIn] = useState(false);
@@ -42,7 +43,7 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="sign-in-form">
       {showPasswordReset ? (
         <PasswordResetForm setShowPasswordReset={setShowPasswordReset} />
       ) : showEmailSignIn ? (
@@ -72,21 +73,16 @@ const ButtonSignIn = ({ setShowEmailSignIn, onSignUpClick }) => {
           <EnvelopeFill /> E-posta ile giriş yap
         </button>
 
-        <button className="btn btn-danger">
+        <button className="btn btn-light">
           <Google /> Google ile giriş yap
         </button>
       </div>
 
-      <div className="mt-3 text-center">
+      <div className="mt-3 text-center sign-in-form-not-have-account">
         Hesabın yok mu?{" "}
         <span
-          className="text-primary"
+          className="text-primary sign-in-form-create-account-link"
           onClick={onSignUpClick}
-          style={{
-            cursor: "pointer",
-            textDecoration: "underline",
-            color: "purple",
-          }}
         >
           Şimdi Oluştur
         </span>
@@ -96,42 +92,66 @@ const ButtonSignIn = ({ setShowEmailSignIn, onSignUpClick }) => {
 };
 
 const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChangeUsername = (username) => {
+    setCredentials({ ...credentials, username: username });
+  };
+
+  const handleChangePassword = (password) => {
+    setCredentials({ ...credentials, password: password });
+  };
+
+  const handleSignIn = () => {
+    console.log(credentials);
+
+    // handle fetchin here
+  };
+
   return (
     <>
       <div className="mb-3">
         <button
-          className="btn btn-light mb-3"
+          className="sign-in-form-back-button"
           onClick={() => setShowEmailSignIn(false)}
         >
-          ← Geri dön
+          <i class="bi bi-arrow-left-short"></i>
+          <p className="sign-in-form-back-button-text">Geri dön</p>
         </button>
       </div>
 
       <div>
-        <div className="mb-3">
-          <label className="form-label">Kullanıcı adı</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Kullanıcı adını gir"
-          />
+        <Input
+          label={"Kullanıcı Adı"}
+          onChange={(e) => handleChangeUsername(e.target.value)}
+          name={"kullanıcı adı"}
+          type={"text"}
+          placeholder={"Kullanıcı adını gir"}
+        />
+
+        <Input
+          label={"Şifre"}
+          onChange={(e) => handleChangePassword(e.target.value)}
+          name={"şifre"}
+          type={"password"}
+          placeholder={"Şifreni gir"}
+        />
+
+        <div className="sign-in-form-forgot-password">
+          <button
+            className="sign-in-form-forgot-password-link"
+            onClick={onForgotPasswordClick}
+          >
+            Şifremi unuttum
+          </button>
         </div>
-        <div className="mb-3">
-          <label className="form-label">Şifre</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Şifreni gir"
-          />
-        </div>
-        <div className="mb-3 text-center">
-          <a href="#" className="text-primary" onClick={onForgotPasswordClick}>
-            Şifremi Unuttum
-          </a>
-        </div>
-        <div className="d-grid gap-2">
-          <button className="btn btn-primary">Giriş Yap</button>
-        </div>
+
+        <button onClick={handleSignIn} className="sign-in-form-sign-in-button">
+          Giriş Yap
+        </button>
       </div>
     </>
   );
