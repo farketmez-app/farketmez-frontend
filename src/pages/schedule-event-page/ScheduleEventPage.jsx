@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./schedule-event-page.css";
 
 import DatePicker from "react-date-picker";
@@ -9,8 +9,26 @@ import SelectBox from "../../components/select-box/SelectBox";
 import { cost, pools, times, where } from "./constants";
 
 import SparksIcon from "../../assets/icons/sparks.svg";
+import { ModalContext } from "../../context/ModalContext";
+import EventModalContent from "./components/event-modal-content/EventModalContent";
+
+const fakeFetchedData = {
+  title: "Regülatorde Tavuk Mangal",
+  rating: 3.3,
+  where: "disarida", // disarida, iceride, mekanda
+  cost: "orta", // ucuz, orta, pahali
+  date: "14/12/2023", // format is dd/mm/yyyy
+  time: "12:00 - 14:00", // format is either "all-day" or "start - end"
+  googleMapsUrl: "https://maps.app.goo.gl/PbL7e9sGeTZ27NPm8",
+  images: [
+    "https://lh5.googleusercontent.com/p/AF1QipPmXfYh7kTSkuAu1wt4JpEsN_Aiytxw-_ehdKeS=w203-h152-k-no",
+    "https://lh5.googleusercontent.com/p/AF1QipM5xecFMByEbfgJppLh9petcNKBxsu2eMZVc-te=w203-h270-k-no",
+    "https://lh5.googleusercontent.com/p/AF1QipNEtvfm4_x_Zfp77yrxmEa7k3IUKytNuBlNnaCf=w203-h152-k-no",
+  ],
+};
 
 function ScheduleEventPage() {
+  const { state, dispatch } = useContext(ModalContext);
   const [value, onChange] = useState(new Date());
   const [time, setTime] = useState({ start: undefined, end: undefined });
   const [calendarOpened, setCalendarOpened] = useState(false);
@@ -22,6 +40,7 @@ function ScheduleEventPage() {
     pool: [],
   });
   const timeSelectionRef = useRef();
+  const [fetchedEvent, setFetchedEvent] = useState({});
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -71,7 +90,32 @@ function ScheduleEventPage() {
     }
   }, [time, value]);
 
-  console.log(event);
+  function handleFetchEvent() {
+    //get with query parameters
+    /*fetch(`https://api.farketmez.com/random_event?where=${event.where}&cost=${event.cost}&pool=${event.pool}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setFetchedEvent(data);
+      });*/
+
+    let fetchedEvent = {};
+
+    const fetchDataPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(fakeFetchedData);
+      }, 1000);
+    });
+
+    fetchDataPromise.then((data) => {
+      dispatch({
+        type: "SET_MODAL_CONTENT",
+        payload: <EventModalContent event={data} />,
+      });
+      dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+      dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+      dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
+    });
+  }
 
   return (
     <div className="schedule-event-page">
@@ -352,8 +396,8 @@ function ScheduleEventPage() {
           event.cost.length === 0 ||
           event.pool.length === 0
         }
-        onClick={()=>{
-          alert(JSON.stringify(event))
+        onClick={() => {
+          handleFetchEvent();
         }}
         className="schedule-event-page__button"
       >
