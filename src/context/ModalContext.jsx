@@ -5,6 +5,7 @@ const initialState = {
   modalContent: null, // React.ReactNode
   visible: false,
   shouldShowLogo: true,
+  hasSpesifiedHeight: true,
 };
 
 const ModalContext = createContext({
@@ -40,6 +41,18 @@ const mainReducer = (state, action) => {
       return {
         ...state,
         shouldShowLogo: action.payload,
+      };
+
+    // usage: dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: true });
+    case "SET_MODAL_HAS_SPESIFIED_HEIGHT":
+      return {
+        ...state,
+        hasSpesifiedHeight: action.payload,
+      };
+
+    case "RESET_MODAL":
+      return {
+        ...initialState,
       };
 
     default:
