@@ -1,63 +1,42 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
-import { AppContext } from "../../context/AppContext";
-import { DropdownContext } from "../../context/DropdownContext";
-import AccountDropdown from "./components/account-dropdown/AccountDropdown";
+import { ModalContext } from "../../context/ModalContext";
+import SignInForm from "../SignIn/SignInForm";
 
 function Header() {
-  const { state: appContextState } = useContext(AppContext);
-  const { state: dropdownContextState, dispatch } = useContext(DropdownContext);
-  const navigate = useNavigate();
+  const { dispatch } = useContext(ModalContext);
 
-  function handleToggleDropdown() {
-    if (dropdownContextState.open) {
-      dispatch({
-        type: "CLOSE_DROPDOWN",
-      });
-      return;
-    }
-
+  function handleOpenSignInModal() {
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
     dispatch({
-      type: "TOGGLE_DROPDOWN",
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <SignInForm
+          onClose={() =>
+            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false })
+          }
+        />
+      ),
     });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
   }
 
   return (
-    <>
-      <header className="header">
-        <Link
-          to={appContextState.user ? "/schedule-event" : "/"}
-          className="header_logo"
-        >
-          <img
-            src="/favicon.ico"
-            alt="Farketmez Logo"
-            className="header_favicon"
-          />
-          Fark Etmez
-        </Link>
-        {appContextState.user ? (
-          <button
-            className="header-button__user"
-            onClick={handleToggleDropdown}
-          >
-            <i className="bi-person-circle"></i> {appContextState.user.username}
-          </button>
-        ) : (
-          <button
-            className="header-button"
-            onClick={() => navigate("/sign-in")}
-          >
-            <i className="bi-box-arrow-in-right"></i> Giriş Yap
-          </button>
-        )}
-
-        <AccountDropdown />
-      </header>
-
-      <div style={{ position: "absolute", right: 0 }} id="dropdown-root"></div>
-    </>
+    <header className="header">
+      <div className="header_logo">
+        <img
+          src="/favicon.ico"
+          alt="Farketmez Logo"
+          className="header_favicon"
+        />
+        Fark Etmez
+      </div>
+	  
+      <button className="header-button" onClick={handleOpenSignInModal}>
+        <i className="bi-box-arrow-in-right"></i> Giriş Yap
+      </button>
+    </header>
   );
 }
 

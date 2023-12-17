@@ -34,6 +34,7 @@ function FarketmezModal() {
 
   function handleCloseModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false });
+    dispatch({ type: "RESET_MODAL" });
   }
 
   return (
@@ -41,24 +42,30 @@ function FarketmezModal() {
       isOpen={state.visible}
       onRequestClose={handleCloseModal}
       contentLabel="Farketmez Modal"
-      className="farketmez-modal"
+      className={
+        state.hasSpesifiedHeight
+          ? "farketmez-modal"
+          : "farketmez-modal farketmez-modal--auto-height"
+      }
       overlayClassName="farketmez-modal__overlay"
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
     >
-      <div className="farketmez-modal__header">
-        {state.title ? (
-          <p className="farketmez-modal__title">{state.title}</p>
-        ) : null}
+      {state.shouldShowLogo === false && state.title.length === 0 ? null : (
+        <div className="farketmez-modal__header">
+          {state.title.length > 0 ? (
+            <p className="farketmez-modal__title">{state.title}</p>
+          ) : null}
 
-        {state.shouldShowLogo ? (
-          <img
-            src={LogoPrimaryImage}
-            alt="Farketmez Logo"
-            className="farketmez-modal__logo"
-          />
-        ) : null}
-      </div>
+          {state.shouldShowLogo ? (
+            <img
+              src={LogoPrimaryImage}
+              alt="Farketmez Logo"
+              className="farketmez-modal__logo"
+            />
+          ) : null}
+        </div>
+      )}
 
       <div className="farketmez-modal__body">{state.modalContent}</div>
     </ReactModal>
