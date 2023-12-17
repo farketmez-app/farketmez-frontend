@@ -1,0 +1,37 @@
+.info-box {
+  padding: 20px;
+  border-radius: 8px;
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.info-box-info {
+  font-size: 15px;
+  font-weight: 500;
+  color: #424242;
+  background-color: #E0F2FF;
+}
+
+.info-box-warning {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ff9800;
+  background-color: #FFEFE0;
+}
+
+.info-box-error {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ff0000;
+  background-color: #FFE0E0;
+}

@@ -30,11 +30,20 @@
   transition: background-color 0.3s ease;
 }
 
-.sign-up-form-sign-up-button:hover {
-  background-color: #4d00e6;
+.sign-up-form-sign-up-button:disabled {
+  background-color: #a6a6a6;
+  cursor: not-allowed;
 }
 
-.sign-up-form-age-gender{
+.sign-up-form-sign-up-button:disabled:hover {
+  background-color: #a6a6a6;
+}
+
+.sign-up-form-sign-up-button:hover {
+  background-color: #4900be;
+}
+
+.sign-up-form-age-gender {
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -141,4 +150,29 @@
 
 .btn-back:hover {
   text-decoration: underline;
+}
+
+.signup-interests-selection-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.sign-up-form-interests {
+  height: 450px;
+}
+
+.sign-up-form-interests-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.sign-up-form-interests-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
