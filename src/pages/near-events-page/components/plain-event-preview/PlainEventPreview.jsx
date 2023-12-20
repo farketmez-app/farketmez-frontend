@@ -18,6 +18,7 @@ function PlainEventPreview({ event }) {
     >
       <div className="plain-event-preview__container">
         <img
+        referrerPolicy="no-referrer"
           className="plain-event-preview__image"
           src={event.images[0]}
           alt={event.title}

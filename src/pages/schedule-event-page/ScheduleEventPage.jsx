@@ -91,13 +91,6 @@ function ScheduleEventPage() {
   }, [time, value]);
 
   function handleFetchEvent() {
-    //get with query parameters
-    /*fetch(`https://api.farketmez.com/random_event?where=${event.where}&cost=${event.cost}&pool=${event.pool}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFetchedEvent(data);
-      });*/
-
     let fetchedEvent = {};
 
     const fetchDataPromise = new Promise((resolve, reject) => {

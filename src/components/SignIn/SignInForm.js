@@ -5,6 +5,11 @@ import SignUpForm from "../SignUp/SignUpForm";
 import "./SignInForm.css";
 import PasswordResetForm from "../PasswordReset/PasswordResetForm";
 import Input from "../input/Input";
+import { BASE_API_URL } from "../../config";
+import InfoBox from "../info-box/InfoBox";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
+
 const SignInForm = () => {
   const { dispatch } = useContext(ModalContext);
   const [showEmailSignIn, setShowEmailSignIn] = useState(false);
@@ -93,22 +98,58 @@ const ButtonSignIn = ({ setShowEmailSignIn, onSignUpClick }) => {
 
 const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
   });
+  const [showInfoBox, setShowInfoBox] = useState(false);
+  const navigate = useNavigate();
+  const { dispatch } = useContext(AppContext);
+  const {dispatch:modalDispatch} = useContext(ModalContext);
 
-  const handleChangeUsername = (username) => {
-    setCredentials({ ...credentials, username: username });
+  const handleChangeEmail = (username) => {
+    setCredentials({ ...credentials, email: username });
   };
 
   const handleChangePassword = (password) => {
     setCredentials({ ...credentials, password: password });
   };
 
-  const handleSignIn = () => {
-    console.log(credentials);
+  const handleSignIn = async () => {
+    try {
+      const response = await fetch(`${BASE_API_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mail: credentials.email,
+          password: credentials.password,
+        }),
+      });
 
-    // handle fetchin here
+      if (response.status === 200) {
+        const token = await response.text();
+        localStorage.setItem("token", token);
+        localStorage.setItem("email", credentials.email);
+
+        dispatch({
+          type: "LOGIN",
+          payload: { email: credentials.email, token: token },
+        });
+
+        modalDispatch({type:"RESET_MODAL"});
+
+        navigate("/schedule-event");
+      } else {
+        setShowInfoBox(true);
+
+        setTimeout(() => {
+          setShowInfoBox(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -125,11 +166,11 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
 
       <div>
         <Input
-          label={"Kullanıcı Adı"}
-          onChange={(e) => handleChangeUsername(e.target.value)}
-          name={"kullanıcı adı"}
+          label={"E-posta adresi"}
+          onChange={(e) => handleChangeEmail(e.target.value)}
+          name={"eposta"}
           type={"text"}
-          placeholder={"Kullanıcı adını gir"}
+          placeholder={"E-posta adresini gir"}
         />
 
         <Input
@@ -149,7 +190,17 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
           </button>
         </div>
 
-        <button onClick={handleSignIn} className="sign-in-form-sign-in-button">
+        {showInfoBox && (
+          <InfoBox text={"Kullanıcı adı veya şifre hatalı"} type={"error"} />
+        )}
+
+        <button
+          disabled={
+            credentials.email.length === 0 || credentials.password.length === 0
+          }
+          onClick={handleSignIn}
+          className="sign-in-form-sign-in-button"
+        >
           Giriş Yap
         </button>
       </div>

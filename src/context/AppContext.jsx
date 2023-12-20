@@ -1,11 +1,11 @@
 import React, { createContext, useReducer } from "react";
 
 const initialState = {
-  user: {
-    id:"Dh24FCZWTHsaIjNhwN",
-    username: "test",
-    //... other user data
-  },
+  user: (localStorage.getItem("email") && localStorage.getItem("token")) ? {
+    email: localStorage.getItem("email"),
+    token: localStorage.getItem("token"),
+  } : null,
+  
   loading: false,
 };
 

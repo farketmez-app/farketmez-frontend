@@ -21,14 +21,24 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <WelcomePage />,
+      element: (
+        <ModalProvider>
+          <WelcomePage />
+
+          <FarketmezModal />
+        </ModalProvider>
+      ),
     },
     {
       path: "/schedule-event",
       element: (
-        <MainLayout>
-          <ScheduleEventPage />
-        </MainLayout>
+        <ModalProvider>
+          <MainLayout>
+            <ScheduleEventPage />
+
+            <FarketmezModal />
+          </MainLayout>
+        </ModalProvider>
       ),
     },
     {
@@ -77,11 +87,7 @@ function App() {
     <div className="App">
       <AppProvider>
         <DropdownProvider>
-          <ModalProvider>
-            <RouterProvider router={router} />
-
-            <FarketmezModal />
-          </ModalProvider>
+          <RouterProvider router={router} />
         </DropdownProvider>
       </AppProvider>
     </div>
