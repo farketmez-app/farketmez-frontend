@@ -22,6 +22,9 @@ const mainReducer = (state, action) => {
         user: action.payload,
       };
     case "LOGOUT":
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      
       return {
         ...state,
         user: null,
