@@ -7,9 +7,11 @@ import StarUnfilledIcon from "../../../../assets/icons/star-unfilled.svg";
 function RatingStars({ rating, size = "default", grayed = false }) {
   // size is either "default" or "large"
   return (
-    <div className={`rating-stars 
+    <div
+      className={`rating-stars 
     ${grayed ? "rating-stars--grayed" : ""}
-    `}>
+    `}
+    >
       <img
         className={`rating-stars__icon rating-stars__icon--${size}`}
         src={

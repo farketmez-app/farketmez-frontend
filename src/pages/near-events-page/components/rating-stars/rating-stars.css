@@ -13,6 +13,11 @@
   height: 20px;
 }
 
+.rating-stars__icon--medium {
+  width: 30px;
+  height: 30px;
+}
+
 .rating-stars__icon--large {
   width: 40px;
   height: 40px;
