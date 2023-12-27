@@ -9,7 +9,7 @@ import EventCommentSkeleton from "./components/event-comment/EventCommentSkeleto
 const fakeComments = [
   {
     id: 1,
-    name: "Ahmet",
+    name: "Uğur",
     surname: "Kaya",
     comment:
       "Yemekleri, ikramları, servisi ve atmosferi ile kusursuz bir mekan. Yemekleri porsiyon olarak fazlasıyla yetiyor. 3 yaşındaki oğlum için ayrı servis ve meze getirmeleri ise çok hoş bir davranıştı.",
@@ -53,6 +53,7 @@ function EventPreview({ event }) {
       <div className="event-preview__container">
         <div className="event-preview__images">
           <img
+          referrerPolicy="no-referrer"
             src={event.images[0]}
             alt="event"
             className={`event-preview__image event-preview__image--1`}
@@ -60,12 +61,14 @@ function EventPreview({ event }) {
 
           <div className="event-preview__images--right-hand-side">
             <img
+            referrerPolicy="no-referrer"
               src={event.images[1]}
               alt="event"
               className={`event-preview__image event-preview__image--2`}
             />
 
             <img
+            referrerPolicy="no-referrer"
               src={event.images[2]}
               alt="event"
               className={`event-preview__image event-preview__image--3`}

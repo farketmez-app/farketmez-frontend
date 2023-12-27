@@ -188,6 +188,7 @@
 
 .react-date-picker__calendar {
   margin-bottom: 10px;
+  z-index: 10 !important;
 }
 
 .react-date-picker__clear-button {

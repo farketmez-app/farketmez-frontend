@@ -40,6 +40,8 @@ function EventModalContent({ event }) {
       <div className="event-modal-content__images">
         <div className="event-modal-content__images--left">
           <img
+          key={event.images[0]}
+          referrerpolicy="no-referrer"
             src={event.images[0]}
             alt="event"
             className="event-modal-content__images--left--image"
@@ -48,12 +50,16 @@ function EventModalContent({ event }) {
 
         <div className="event-modal-content__images--right">
           <img
+          key={event.images[1]}
+          referrerpolicy="no-referrer"
             src={event.images[1]}
             alt="event"
             className="event-modal-content__images--right--image"
           />
 
           <img
+          key={event.images[2]}
+          referrerpolicy="no-referrer"
             src={event.images[2]}
             alt="event"
             className="event-modal-content__images--right--image"

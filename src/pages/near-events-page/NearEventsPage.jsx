@@ -95,7 +95,6 @@ function NearEventsPage() {
   // add number to markers that has more than one event
   useEffect(() => {
     if (!currentLocation) {
-      console.log("no current location", currentLocation);
       return;
     }
 

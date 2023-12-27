@@ -16,59 +16,94 @@ import AttendedEventsPage from "./pages/attended-events-page/AttendedEventsPage"
 import MainLayout from "./layouts/main-layout/MainLayout";
 import { DropdownProvider } from "./context/DropdownContext";
 import AccountSettingsPage from "./pages/account-settings-page/AccountSettingsPage";
+import AccountDropdown from "./components/header/components/account-dropdown/AccountDropdown";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <WelcomePage />,
+      element: (
+        <ModalProvider>
+          <WelcomePage />
+
+          <FarketmezModal />
+        </ModalProvider>
+      ),
     },
     {
       path: "/schedule-event",
       element: (
-        <MainLayout>
-          <ScheduleEventPage />
-        </MainLayout>
+        <DropdownProvider>
+          <ModalProvider>
+            <MainLayout>
+              <ScheduleEventPage />
+
+              <FarketmezModal />
+
+              <AccountDropdown />
+            </MainLayout>
+          </ModalProvider>
+        </DropdownProvider>
       ),
     },
     {
       path: "/my-events",
       element: (
-        <MainLayout>
-          <MyEventsPage />
-        </MainLayout>
+        <DropdownProvider>
+          <MainLayout>
+            <MyEventsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
       ),
     },
     {
       path: "/public-events",
       element: (
-        <MainLayout>
-          <PublicEventsPage />
-        </MainLayout>
+        <DropdownProvider>
+          <MainLayout>
+            <PublicEventsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
       ),
     },
     {
       path: "/near-events",
       element: (
-        <MainLayout hasPadding={false}>
-          <NearEventsPage />
-        </MainLayout>
+        <DropdownProvider>
+          <MainLayout hasPadding={false}>
+            <NearEventsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
       ),
     },
     {
       path: "/attended-events",
       element: (
-        <MainLayout shouldShowSwitcher={false}>
-          <AttendedEventsPage />
-        </MainLayout>
+        <DropdownProvider>
+          <MainLayout shouldShowSwitcher={false}>
+            <AttendedEventsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
       ),
     },
     {
       path: "/account-settings",
       element: (
-        <MainLayout shouldShowSwitcher={false}>
-          <AccountSettingsPage />
-        </MainLayout>
+        <DropdownProvider>
+          <MainLayout shouldShowSwitcher={false}>
+            <AccountSettingsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
       ),
     },
   ]);
@@ -76,13 +111,7 @@ function App() {
   return (
     <div className="App">
       <AppProvider>
-        <DropdownProvider>
-          <ModalProvider>
-            <RouterProvider router={router} />
-
-            <FarketmezModal />
-          </ModalProvider>
-        </DropdownProvider>
+        <RouterProvider basename="/" router={router} />
       </AppProvider>
     </div>
   );

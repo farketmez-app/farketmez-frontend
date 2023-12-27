@@ -108,6 +108,12 @@ label {
   background-color: #4d00e6;
 }
 
+.sign-in-form-sign-in-button:disabled {
+  background-color: #666666;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 button {
   padding: 10px 20px;
   border: none;
