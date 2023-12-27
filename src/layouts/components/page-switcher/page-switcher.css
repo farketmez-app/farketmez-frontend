@@ -25,6 +25,7 @@
   border: 1px solid #9e9e9e;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  margin:0;
 }
 
 .page-switcher__button:hover {
