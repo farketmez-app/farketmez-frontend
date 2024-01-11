@@ -49,6 +49,7 @@ function WelcomePage() {
     });
     dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
   }
+
   return (
     <div className="welcome-page">
       <Header />

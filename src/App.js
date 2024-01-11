@@ -50,11 +50,15 @@ function App() {
       path: "/my-events",
       element: (
         <DropdownProvider>
-          <MainLayout>
-            <MyEventsPage />
+          <ModalProvider>
+            <MainLayout>
+              <MyEventsPage />
 
-            <AccountDropdown />
-          </MainLayout>
+              <AccountDropdown />
+
+              <FarketmezModal />
+            </MainLayout>
+          </ModalProvider>
         </DropdownProvider>
       ),
     },
