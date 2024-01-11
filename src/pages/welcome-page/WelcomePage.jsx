@@ -20,6 +20,10 @@ function WelcomePage() {
 
   function handleOpenSignInModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -36,6 +40,10 @@ function WelcomePage() {
   }
   function handleOpenSignUpModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
     dispatch({
       type: "SET_MODAL_CONTENT",

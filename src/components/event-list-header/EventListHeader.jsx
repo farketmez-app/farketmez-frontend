@@ -21,6 +21,7 @@ function EventListHeader({ title, rightElement }) {
     dispatch({ type: "SET_MODAL_TITLE", payload: "Etkinlik Oluştur" });
     dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
 
     dispatch({
       type: "SET_MODAL_CONTENT",

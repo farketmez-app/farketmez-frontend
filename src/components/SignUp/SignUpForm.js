@@ -8,6 +8,7 @@ import SimpleDropdown from "../simple-dropdown/SimpleDropdown";
 import SelectBox from "../select-box/SelectBox";
 import InfoBox from "../info-box/InfoBox";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const SignUpForm = () => {
   const { dispatch } = useContext(ModalContext);
@@ -15,6 +16,7 @@ const SignUpForm = () => {
 
   const handleSignInLinkClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -76,20 +78,57 @@ const ButtonSignIn = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
 };
 
 const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
+  const { dispatch } = useContext(AppContext);
   const [user, setUser] = useState({
+    name: "",
+    lastname: "",
     username: "",
     password: "",
     passwordConfirmation: "",
     email: "",
     age: "",
-    gender: "",
+    gender: "Erkek",
     interests: [],
   });
   const navigate = useNavigate();
 
   function handleSignup() {
-    navigate("/schedule-event");
-    console.log(user);
+    const ageNumber = parseInt(user.age);
+
+    fetch("http://localhost:8080/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user.username,
+        password: user.password,
+        name: user.name,
+        lastname: user.lastname,
+        age: ageNumber,
+        gender:
+          (user.gender === "Erkek" && "Male") ||
+          (user.gender === "Kadın" && "Female"),
+        longitude: -1,
+        latitude: -1,
+        mail: user.email,
+        userType: {
+          type: "USER",
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            email: res.mail,
+            token: "token",
+          },
+        });
+        navigate("/schedule-event");
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -104,13 +143,31 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
         </button>
       </div>
 
-      <div>
+      <div style={{ paddingTop: 240 }}>
+        <div className="sign-up-form-age-gender">
+          <Input
+            onChange={(e) => setUser({ ...user, name: e.target.value })}
+            value={user.name}
+            customClassname={"sign-in-form-input"}
+            label={"Ad"}
+            name={"ad"}
+            type={"text"}
+            placeholder={"Adını gir"}
+          />
+          <Input
+            onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+            value={user.lastname}
+            customClassname={"sign-in-form-input"}
+            label={"Soyad"}
+            name={"soyad"}
+            type={"text"}
+            placeholder={"Soyadını gir"}
+          />
+        </div>
         <Input
           onChange={(e) => setUser({ ...user, username: e.target.value })}
           value={user.username}
-          customClassname={
-            "sign-in-form-input sign-in-form-input--has-padding-top"
-          }
+          customClassname={"sign-in-form-input "}
           label={"Kullanıcı adı"}
           name={"kullanıcı adı"}
           type={"text"}

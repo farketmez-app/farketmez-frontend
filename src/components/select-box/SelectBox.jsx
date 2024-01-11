@@ -17,7 +17,7 @@ export default function SelectBox({
       onClick={() => toggleSelectBox(option)}
     >
       {image && <img src={image} alt={text} />}
-      
+
       <p>{text}</p>
     </button>
   );

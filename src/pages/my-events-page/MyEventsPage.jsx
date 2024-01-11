@@ -17,9 +17,7 @@ function MyEventsPage() {
         setfetching(false);
       });
   }, []);
-
-  console.log(myEvents);
-
+  
   return (
     <div className="my-events-page">
       <EventList

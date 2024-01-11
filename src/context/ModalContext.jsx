@@ -1,11 +1,13 @@
 import React, { createContext, useReducer } from "react";
 
 const initialState = {
-  title: "", // string
+  title: "",
   modalContent: null, // React.ReactNode
   visible: false,
   shouldShowLogo: true,
+  shouldCloseOnOverlayClick: false,
   hasSpesifiedHeight: true,
+
 };
 
 const ModalContext = createContext({
@@ -41,6 +43,13 @@ const mainReducer = (state, action) => {
       return {
         ...state,
         shouldShowLogo: action.payload,
+      };
+
+    // usage: dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
+    case "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK":
+      return {
+        ...state,
+        shouldCloseOnOverlayClick: action.payload,
       };
 
     // usage: dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: true });

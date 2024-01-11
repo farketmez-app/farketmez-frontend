@@ -43,15 +43,12 @@ function CreateEvent() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(newEvent);
   }
 
   const containerStyle = {
     width: "100%",
     height: "100%",
   };
-
-  console.log(newEvent);
 
   return (
     <div className="create-event">

@@ -2,33 +2,9 @@ import React from "react";
 import "./event-list-item.css";
 import RatingStars from "../../pages/near-events-page/components/rating-stars/RatingStars";
 
-// assets
 import LocationArrowIcon from "../../assets/icons/location-arrow.svg";
 import LockIcon from "../../assets/icons/lock.png";
 import CopyLinkButton from "./components/copy-link-button/CopyLinkButton";
-
-/**{
-    id: 1,
-    creatorId: 1,
-    isActive: true,
-    isPrivate: true,
-    privateLink: "https://www.google.com",
-    title: "Etkinlik 1",
-    description: "Etkinlik 1 açıklama",
-    averageRating: 4.5,
-    date: "2021-01-01",
-    createdAt: "2021-01-01",
-    updatedAt: "2021-01-01",
-    deletedAt: "2021-01-01",
-    eventType: {
-      id: 1,
-      name: "Etkinlik Tipi 1",
-    },
-    location: {
-      id: 1,
-      name: "Etkinlik Yeri 1",
-    },
-  } */
 
 function EventListItem({ event }) {
   return (

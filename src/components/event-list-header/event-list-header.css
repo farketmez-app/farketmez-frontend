@@ -102,7 +102,6 @@
   font-weight: 500;
 }
 
-/*remove the first child margin top*/
 .event-list-header__dropdown-content--header-button:first-child {
   margin-top: 0;
 }

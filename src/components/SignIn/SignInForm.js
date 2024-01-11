@@ -17,6 +17,7 @@ const SignInForm = () => {
 
   const handleSignUpLinkClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -32,7 +33,7 @@ const SignInForm = () => {
   };
 
   const handleForgotPasswordClick = () => {
-    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Şifre Yenileme" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -129,11 +130,6 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
 
       if (response.status === 200) {
         const responseText = await response.text();
-
-        console.log("responseText", responseText);
-        /**responseText:
-         * responseText token: eyJhbGciOiJIUzUxMiJ9 id: 2
-         */
 
         const token = responseText.split(" ")[1];
         const id = responseText.split(" ")[2];

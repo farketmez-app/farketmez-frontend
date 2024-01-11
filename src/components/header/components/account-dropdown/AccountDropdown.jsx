@@ -31,7 +31,6 @@ function AccountDropdown() {
       title: "Çıkış Yap",
       icon: "bi-box-arrow-left",
       onClick: () => {
-        // handle sign out
         appContextDispatch({ type: "LOGOUT" });
         dispatch({ type: "CLOSE_DROPDOWN" });
         navigate("/");
