@@ -104,7 +104,7 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
   const [showInfoBox, setShowInfoBox] = useState(false);
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
-  const {dispatch:modalDispatch} = useContext(ModalContext);
+  const { dispatch: modalDispatch } = useContext(ModalContext);
 
   const handleChangeEmail = (username) => {
     setCredentials({ ...credentials, email: username });
@@ -128,16 +128,24 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
       });
 
       if (response.status === 200) {
-        const token = await response.text();
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", credentials.email);
+        const responseText = await response.text();
+
+        console.log("responseText", responseText);
+        /**responseText:
+         * responseText token: eyJhbGciOiJIUzUxMiJ9 id: 2
+         */
+
+        const token = responseText.split(" ")[1];
+        const id = responseText.split(" ")[2];
 
         dispatch({
           type: "LOGIN",
-          payload: { email: credentials.email, token: token },
+          payload: { email: credentials.email, token: token, id: id },
         });
 
-        modalDispatch({type:"RESET_MODAL"});
+        localStorage.setItem("token", token);
+
+        modalDispatch({ type: "RESET_MODAL" });
 
         navigate("/schedule-event");
       } else {
