@@ -12,7 +12,7 @@ export interface UserDto {
 	latitude: string;
 	mail: string;
 	userType: UserTypeDto;
-	createdAt: Date;
-	updatedAt: Date;
-	deletedAt: Date;
+	createdAt: string;
+	updatedAt: string | null;
+	deletedAt: string | null;
 }
