@@ -10,7 +10,7 @@ export interface EventDto {
 	place: string;
 	description: string;
 	averageRating: number;
-	date: string; // Timestamp, JavaScript'te string olarak işlenir
+	date: string;
 	createdAt: string;
 	deletedAt: string | null;
 	updatedAt: string | null;

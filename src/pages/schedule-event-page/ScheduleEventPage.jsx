@@ -105,6 +105,10 @@ function ScheduleEventPage() {
         payload: <EventModalContent event={data} />,
       });
       dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+      dispatch({
+        type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+        payload: true,
+      });
       dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
       dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
     });

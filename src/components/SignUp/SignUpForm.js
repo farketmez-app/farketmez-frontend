@@ -1,13 +1,12 @@
 import { useState, useContext } from "react";
-import { EnvelopeFill, Google, ArrowLeft } from "react-bootstrap-icons";
+import { EnvelopeFill, Google } from "react-bootstrap-icons";
 import "./SignUpForm.css";
 import { ModalContext } from "../../context/ModalContext";
 import SignInForm from "../SignIn/SignInForm";
 import Input from "../input/Input";
 import SimpleDropdown from "../simple-dropdown/SimpleDropdown";
-import SelectBox from "../select-box/SelectBox";
-import InfoBox from "../info-box/InfoBox";
-import { interests } from "./constants";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const SignUpForm = () => {
   const { dispatch } = useContext(ModalContext);
@@ -15,6 +14,10 @@ const SignUpForm = () => {
 
   const handleSignInLinkClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -76,154 +79,161 @@ const ButtonSignIn = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
 };
 
 const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
+  const { dispatch } = useContext(AppContext);
   const [user, setUser] = useState({
+    name: "",
+    lastname: "",
     username: "",
     password: "",
     passwordConfirmation: "",
     email: "",
     age: "",
-    gender: "",
+    gender: "Erkek",
     interests: [],
   });
-  // step 1 is for username, password, passwordConfirmation, email form view
-  // step 2 is for interests view
-  const [step, setStep] = useState(1);
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const navigate = useNavigate();
 
-  if (step === 1) {
-    return (
-      <>
-        <div className="mb-3 text-left">
-          <button
-            className="sign-in-form-back-button"
-            onClick={() => setShowEmailSignUp(false)}
-          >
-            <i class="bi bi-arrow-left-short"></i>
-            <p className="sign-in-form-back-button-text">Geri dön</p>
-          </button>
-        </div>
+  function handleSignup() {
+    const ageNumber = parseInt(user.age);
 
-        <div>
-          <Input
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
-            value={user.username}
-            customClassname={
-              "sign-in-form-input sign-in-form-input--has-padding-top"
-            }
-            label={"Kullanıcı adı"}
-            name={"kullanıcı adı"}
-            type={"text"}
-            placeholder={"Kullanıcı adını gir"}
-          />
-          <Input
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-            value={user.password}
-            customClassname={"sign-in-form-input"}
-            label={"Şifre"}
-            name={"şifre"}
-            type={"password"}
-            placeholder={"Şifreni gir"}
-          />
-          <Input
-            onChange={(e) =>
-              setUser({ ...user, passwordConfirmation: e.target.value })
-            }
-            value={user.passwordConfirmation}
-            customClassname={"sign-in-form-input"}
-            label={"Şifre Doğrulama"}
-            name={"şifre doğrulama"}
-            type={"password"}
-            placeholder={"Şifreni doğrula"}
-          />
-          <Input
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-            value={user.email}
-            customClassname={"sign-in-form-input"}
-            label={"E-posta Adresi"}
-            name={"e-posta"}
-            type={"email"}
-            placeholder={"E-posta adresini gir"}
-          />
-          <div className="sign-up-form-age-gender">
-            <Input
-              onChange={(e) => {
-                if (isNaN(e.target.value)) {
-                  return;
-                }
-
-                if (e.target.value.length > 2) {
-                  return;
-                }
-
-                setUser({ ...user, age: e.target.value });
-              }}
-              value={user.age}
-              customClassname={"sign-in-form-input"}
-              label={"Yaş"}
-              name={"yaş"}
-              type={"text"}
-              placeholder={"Yaşını gir"}
-            />
-            <SimpleDropdown
-              onChange={(e) => setUser({ ...user, gender: e.target.value })}
-              value={user.gender}
-              options={["Erkek", "Kadın"]}
-              label={"Cinsiyet"}
-            />
-          </div>
-
-          <button
-            onClick={() => setStep(2)}
-            className="sign-up-form-sign-up-button"
-          >
-            Devam et
-          </button>
-        </div>
-      </>
-    );
+    fetch("http://localhost:8080/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user.username,
+        password: user.password,
+        name: user.name,
+        lastname: user.lastname,
+        age: ageNumber,
+        gender:
+          (user.gender === "Erkek" && "Male") ||
+          (user.gender === "Kadın" && "Female"),
+        longitude: -1,
+        latitude: -1,
+        mail: user.email,
+        userType: {
+          type: "USER",
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            email: res.mail,
+            id: res.id,
+            userHasSelectedInterests:false
+          },
+        });
+        
+        navigate("/schedule-event");
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
     <>
-      <div className="signup-interests-selection-view">
-        <button className="sign-in-form-back-button" onClick={() => setStep(1)}>
+      <div className="mb-3 text-left">
+        <button
+          className="sign-in-form-back-button"
+          onClick={() => setShowEmailSignUp(false)}
+        >
           <i class="bi bi-arrow-left-short"></i>
           <p className="sign-in-form-back-button-text">Geri dön</p>
         </button>
       </div>
 
-      <div className="sign-up-form-interests">
-        <p className="sign-up-form-interests-title">
-          İlgi alanlarını seçerek etkinlik önerileri alabilirsin
-        </p>
-        <div className="sign-up-form-interests-grid">
-          {interests.map((interest) => (
-            <SelectBox
-              selectedOnes={selectedInterests}
-              option={interest}
-              toggleSelectBox={(option) => {
-                if (selectedInterests.includes(option)) {
-                  setSelectedInterests(
-                    selectedInterests.filter((item) => item !== option)
-                  );
-                } else {
-                  setSelectedInterests([...selectedInterests, option]);
-                }
-              }}
-              image={interest.image}
-              text={interest.name}
-            />
-          ))}
+      <div style={{ paddingTop: 240 }}>
+        <div className="sign-up-form-age-gender">
+          <Input
+            onChange={(e) => setUser({ ...user, name: e.target.value })}
+            value={user.name}
+            customClassname={"sign-in-form-input"}
+            label={"Ad"}
+            name={"ad"}
+            type={"text"}
+            placeholder={"Adını gir"}
+          />
+          <Input
+            onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+            value={user.lastname}
+            customClassname={"sign-in-form-input"}
+            label={"Soyad"}
+            name={"soyad"}
+            type={"text"}
+            placeholder={"Soyadını gir"}
+          />
+        </div>
+        <Input
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          value={user.username}
+          customClassname={"sign-in-form-input "}
+          label={"Kullanıcı adı"}
+          name={"kullanıcı adı"}
+          type={"text"}
+          placeholder={"Kullanıcı adını gir"}
+        />
+        <Input
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          value={user.password}
+          customClassname={"sign-in-form-input"}
+          label={"Şifre"}
+          name={"şifre"}
+          type={"password"}
+          placeholder={"Şifreni gir"}
+        />
+        <Input
+          onChange={(e) =>
+            setUser({ ...user, passwordConfirmation: e.target.value })
+          }
+          value={user.passwordConfirmation}
+          customClassname={"sign-in-form-input"}
+          label={"Şifre Doğrulama"}
+          name={"şifre doğrulama"}
+          type={"password"}
+          placeholder={"Şifreni doğrula"}
+        />
+        <Input
+          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          value={user.email}
+          customClassname={"sign-in-form-input"}
+          label={"E-posta Adresi"}
+          name={"e-posta"}
+          type={"email"}
+          placeholder={"E-posta adresini gir"}
+        />
+        <div className="sign-up-form-age-gender">
+          <Input
+            onChange={(e) => {
+              if (isNaN(e.target.value)) {
+                return;
+              }
+
+              if (e.target.value.length > 2) {
+                return;
+              }
+
+              setUser({ ...user, age: e.target.value });
+            }}
+            value={user.age}
+            customClassname={"sign-in-form-input"}
+            label={"Yaş"}
+            name={"yaş"}
+            type={"text"}
+            placeholder={"Yaşını gir"}
+          />
+          <SimpleDropdown
+            onChange={(e) => setUser({ ...user, gender: e.target.value })}
+            value={user.gender}
+            options={["Erkek", "Kadın"]}
+            label={"Cinsiyet"}
+          />
         </div>
 
-        {selectedInterests.length < 3 && (
-          <InfoBox text={"En az 3 ilgi alanı seçmelisin"} type="error" />
-        )}
-
-        <button
-          disabled={selectedInterests.length < 3}
-          className="sign-up-form-sign-up-button"
-        >
+        <button onClick={handleSignup} className="sign-up-form-sign-up-button">
           Hesap Oluştur
         </button>
       </div>

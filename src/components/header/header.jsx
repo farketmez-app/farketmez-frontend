@@ -14,6 +14,7 @@ function Header() {
   function handleOpenSignInModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
+    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
     dispatch({
       type: "SET_MODAL_CONTENT",
       payload: (
@@ -42,7 +43,7 @@ function Header() {
         Fark Etmez
       </div>
 
-      {state.user ? (
+      {state.user.id ? (
         <button onClick={handleDropdown} className="header-button">{state.user.email}</button>
       ) : (
         <button className="header-button" onClick={handleOpenSignInModal}>

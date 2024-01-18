@@ -30,7 +30,7 @@ ReactModal.setAppElement("#modal-root");
  *
  */
 function FarketmezModal() {
-  const { state, dispatch } = useContext(ModalContext); // state is like: { modalContent: null, visible: false }, dispatch is a function
+  const { state, dispatch } = useContext(ModalContext); 
 
   function handleCloseModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: false });
@@ -48,7 +48,7 @@ function FarketmezModal() {
           : "farketmez-modal farketmez-modal--auto-height"
       }
       overlayClassName="farketmez-modal__overlay"
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={state.shouldCloseOnOverlayClick}
       shouldCloseOnEsc={true}
     >
       {state.shouldShowLogo === false && state.title.length === 0 ? null : (
