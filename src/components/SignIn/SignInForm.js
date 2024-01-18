@@ -139,11 +139,6 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
         const responseText = await response.text();
 
         const id = responseText.split(" ")[1];
-        const email = responseText.split(" ")[3];
-
-        console.log(email)
-
-        console.log(id)
 
         fetch(`http://localhost:8080/user-interests/${id}/interests`)
           .then((res) => {
@@ -157,7 +152,6 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
                 type: "SET_USER_HAS_SELECTED_INTERESTS",
                 payload: true,
               });
-              return res.json();
             } else {
               dispatch({
                 type: "SET_USER_HAS_SELECTED_INTERESTS",
@@ -168,13 +162,12 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
                 type: "LOGIN",
                 payload: { email: credentials.email, id: id },
               });
-
-              localStorage.setItem("user-id", id)
-      
-              modalDispatch({ type: "RESET_MODAL" });
-      
-              navigate("/schedule-event");
             }
+          })
+          .then(() => {
+            modalDispatch({ type: "RESET_MODAL" });
+
+            navigate("/schedule-event");
           })
           .catch((err) => console.log(err));
       } else {

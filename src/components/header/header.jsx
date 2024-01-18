@@ -43,7 +43,7 @@ function Header() {
         Fark Etmez
       </div>
 
-      {state.user ? (
+      {state.user.id ? (
         <button onClick={handleDropdown} className="header-button">{state.user.email}</button>
       ) : (
         <button className="header-button" onClick={handleOpenSignInModal}>

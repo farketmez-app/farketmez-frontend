@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./public-events-page.css";
 import EventList from "../../components/events-list/EventList";
 import { eventsListTitle } from "./constants";
-import { AppContext } from "../../context/AppContext";
 
 function PublicEventsPage() {
-  const { state } = useContext(AppContext);
   const [events, setEvents] = useState([]);
   const [fetching, setFetching] = useState(false);
 

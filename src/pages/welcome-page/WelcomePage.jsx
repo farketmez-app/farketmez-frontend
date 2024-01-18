@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import SignInForm from "../../components/SignIn/SignInForm";
 import SignUpForm from "../../components/SignUp/SignUpForm";
@@ -6,17 +6,9 @@ import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import { ModalContext } from "../../context/ModalContext";
 import "./welcome-page.css";
-import { AppContext } from "../../context/AppContext";
 function WelcomePage() {
   const navigate = useNavigate();
   const { dispatch } = useContext(ModalContext);
-  const { state } = useContext(AppContext);
-
-  useEffect(() => {
-    if (state.user) {
-      navigate("/schedule-event");
-    }
-  }, [state.user, navigate]);
 
   function handleOpenSignInModal() {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });

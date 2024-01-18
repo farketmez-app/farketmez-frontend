@@ -1,12 +1,10 @@
 import { useState, useContext } from "react";
-import { EnvelopeFill, Google, ArrowLeft } from "react-bootstrap-icons";
+import { EnvelopeFill, Google } from "react-bootstrap-icons";
 import "./SignUpForm.css";
 import { ModalContext } from "../../context/ModalContext";
 import SignInForm from "../SignIn/SignInForm";
 import Input from "../input/Input";
 import SimpleDropdown from "../simple-dropdown/SimpleDropdown";
-import SelectBox from "../select-box/SelectBox";
-import InfoBox from "../info-box/InfoBox";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 
@@ -16,7 +14,10 @@ const SignUpForm = () => {
 
   const handleSignInLinkClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Giriş Yap" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -123,11 +124,11 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
           type: "LOGIN",
           payload: {
             email: res.mail,
-            token: "token",
-            id: res.id
+            id: res.id,
+            userHasSelectedInterests:false
           },
         });
-        localStorage.setItem('user-id', res.id)
+        
         navigate("/schedule-event");
       })
       .catch((err) => console.log(err));

@@ -4,28 +4,23 @@ import EventListHeader from "../event-list-header/EventListHeader";
 import EventListItem from "../event-list-item/EventListItem";
 
 function EventList({ events, title, rightElement, fetching }) {
-  function renderLoadingSkeleton() {
-    return (
-      <div className="event-list__body--skeleton">
-        <div className="event-list__body--skeleton-item"></div>
+  function renderListOrMessage() {
+    if (fetching || !events) return;
 
-        <div className="event-list__body--skeleton-item"></div>
-
-        <div className="event-list__body--skeleton-item"></div>
-      </div>
-    );
+    if (events.length === 0) {
+      return <p>Hiç Etkinlik Yok. Hemen bir tane ekle.</p>;
+    } else {
+      return events.map((event) => (
+        <EventListItem key={event.id} event={event} />
+      ));
+    }
   }
+
   return (
     <div className="event-list">
       <EventListHeader title={title} rightElement={rightElement} />
 
-      <div className="event-list__body">
-        {fetching
-          ? renderLoadingSkeleton()
-          : events.map((event) => (
-              <EventListItem key={event.id} event={event} />
-            ))}
-      </div>
+      <div className="event-list__body">{renderListOrMessage()}</div>
     </div>
   );
 }

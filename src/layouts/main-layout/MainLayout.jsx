@@ -17,12 +17,12 @@ function MainLayoutWithPadding({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (state.user && !state.user.userHasSelectedInterests) {
+    if (state.user.id && !state.user.userHasSelectedInterests) {
       dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
       dispatch({ type: "SET_MODAL_TITLE", payload: "İlgi Alanlarını Seç" });
       dispatch({
         type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
-        payload: true,
+        payload: false,
       });
       dispatch({
         type: "SET_MODAL_CONTENT",
@@ -30,7 +30,7 @@ function MainLayoutWithPadding({
       });
       dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
     }
-  }, [state.user, navigate, dispatch]);
+  }, [state.user.id, state.user.userHasSelectedInterests, navigate, dispatch]);
 
   return (
     <div

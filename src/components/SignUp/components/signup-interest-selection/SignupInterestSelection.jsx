@@ -5,23 +5,10 @@ import InfoBox from "../../../info-box/InfoBox";
 import { AppContext } from "../../../../context/AppContext";
 import { ModalContext } from "../../../../context/ModalContext";
 
-const CINEMA = "Sinema";
-const RESTAURANT = "Restoran ve yemek";
-const CONCERT = "Konserler ve canlı müzik";
-const THEATRE = "Tiyatro";
-const ART_GALLERY = "Sanat sergileri ve galeriler";
-const SPORTS = "Spor";
-const OUTDOOR = "Doğa yürüyüşleri ve açık hava";
-const CLUBS = "Gece kulüpleri ve eğlence mekanları";
-const READING = "Kitap okuma ve edebiyat";
-const MUSEUM = "Müzeler";
-const KIDS_ACTIVITIES = "Çocuk etkinlikleri";
-const YOGA = "Yoga ve spor salonları";
-
 function SignupInterestSelection() {
   const [selectedInterests, setSelectedInterests] = useState([]);
-  const { state } = useContext(AppContext);
-  const {dispatch:modalDispatch} = useContext(ModalContext);
+  const { state, dispatch } = useContext(AppContext);
+  const { dispatch: modalDispatch } = useContext(ModalContext);
 
   function handleSetInterestsForUser() {
     const ids = [];
@@ -41,11 +28,11 @@ function SignupInterestSelection() {
       }
     )
       .then((res) => {
-        console.log(res);
         res.json();
       })
       .then((data) => {
-        modalDispatch({type:'RESET_MODAL'})
+        dispatch({ type: "SET_USER_HAS_SELECTED_INTERESTS", payload: true });
+        modalDispatch({ type: "RESET_MODAL" });
       })
       .catch((err) => console.log(err));
   }
