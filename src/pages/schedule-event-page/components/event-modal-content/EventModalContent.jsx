@@ -35,13 +35,22 @@ function EventModalContent({ event }) {
   const costFormatted =
     event.cost === "ucuz" ? "Ucuz" : event.cost === "orta" ? "Orta" : "Pahalı";
 
+  //TODO: Make real requests in the following two functions after attending an event is done on backend side.
+  function handleAttendEvent() {
+    console.log("attended");
+  }
+
+  function handleRedirectToGoogleMapsUrl() {
+    console.log("redirecting to google maps url");
+  }
+
   return (
     <div className="event-modal-content">
       <div className="event-modal-content__images">
         <div className="event-modal-content__images--left">
           <img
-          key={event.images[0]}
-          referrerpolicy="no-referrer"
+            key={event.images[0]}
+            referrerpolicy="no-referrer"
             src={event.images[0]}
             alt="event"
             className="event-modal-content__images--left--image"
@@ -50,16 +59,16 @@ function EventModalContent({ event }) {
 
         <div className="event-modal-content__images--right">
           <img
-          key={event.images[1]}
-          referrerpolicy="no-referrer"
+            key={event.images[1]}
+            referrerpolicy="no-referrer"
             src={event.images[1]}
             alt="event"
             className="event-modal-content__images--right--image"
           />
 
           <img
-          key={event.images[2]}
-          referrerpolicy="no-referrer"
+            key={event.images[2]}
+            referrerpolicy="no-referrer"
             src={event.images[2]}
             alt="event"
             className="event-modal-content__images--right--image"
@@ -89,17 +98,26 @@ function EventModalContent({ event }) {
 
       <div className="event-modal-content__title">{event.title}</div>
 
-      <button
-        onClick={() => window.open(event.googleMapsUrl)}
-        className="event-modal-content__button"
-      >
-        Konuma Git
-        <img
-          src={LocationArrowIcon}
-          alt="location-arrow"
-          className="event-modal-content__button--icon"
-        />
-      </button>
+      <div className="event-modal-content__buttons-container">
+        <button
+          onClick={handleAttendEvent}
+          className="event-modal-content__attend-button"
+        >
+          Katıl
+        </button>
+
+        <button
+          onClick={handleRedirectToGoogleMapsUrl}
+          className="event-modal-content__button"
+        >
+          Konuma Git
+          <img
+            src={LocationArrowIcon}
+            alt="location-arrow"
+            className="event-modal-content__button--icon"
+          />
+        </button>
+      </div>
     </div>
   );
 }
