@@ -3,6 +3,7 @@ import { interests } from "../../constants";
 import SelectBox from "../../../select-box/SelectBox";
 import InfoBox from "../../../info-box/InfoBox";
 import { AppContext } from "../../../../context/AppContext";
+import { ModalContext } from "../../../../context/ModalContext";
 
 const CINEMA = "Sinema";
 const RESTAURANT = "Restoran ve yemek";
@@ -20,70 +21,33 @@ const YOGA = "Yoga ve spor salonları";
 function SignupInterestSelection() {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const { state } = useContext(AppContext);
-
-  function changeInterestsToEnum(interests) {
-    let interestsEnum = [];
-    interests.forEach((interest) => {
-      switch (interest.name) {
-        case CINEMA:
-          interestsEnum.push("CINEMA");
-          break;
-        case RESTAURANT:
-          interestsEnum.push("RESTAURANT");
-          break;
-        case CONCERT:
-          interestsEnum.push("CONCERT");
-          break;
-        case THEATRE:
-          interestsEnum.push("THEATRE");
-          break;
-        case ART_GALLERY:
-          interestsEnum.push("ART_GALLERY");
-          break;
-        case SPORTS:
-          interestsEnum.push("SPORTS");
-          break;
-        case OUTDOOR:
-          interestsEnum.push("OUTDOOR");
-          break;
-        case CLUBS:
-          interestsEnum.push("CLUBS");
-          break;
-        case READING:
-          interestsEnum.push("READING");
-          break;
-        case MUSEUM:
-          interestsEnum.push("MUSEUM");
-          break;
-        case KIDS_ACTIVITIES:
-          interestsEnum.push("KIDS_ACTIVITIES");
-          break;
-        case YOGA:
-          interestsEnum.push("YOGA");
-          break;
-        default:
-          break;
-      }
-    });
-    return interestsEnum;
-  }
+  const {dispatch:modalDispatch} = useContext(ModalContext);
 
   function handleSetInterestsForUser() {
-    // request body will look like this: ["MUSEUM","YOGA","READING","OUTDOOR"] (string)
-    /**
-    fetch(`http://localhost:8080/user/${state.user.id}/interests`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(changeInterestsToEnum(selectedInterests)),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      }); */
+    const ids = [];
 
-    console.log(JSON.stringify(changeInterestsToEnum(selectedInterests)));
+    for (let i = 0; i < selectedInterests.length; i++) {
+      ids.push(selectedInterests[i].id);
+    }
+
+    fetch(
+      `http://localhost:8080/user-interests/${state.user.id}/setInterests`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ids),
+      }
+    )
+      .then((res) => {
+        console.log(res);
+        res.json();
+      })
+      .then((data) => {
+        modalDispatch({type:'RESET_MODAL'})
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -92,6 +56,7 @@ function SignupInterestSelection() {
         <p className="sign-up-form-interests-title">
           İlgi alanlarını seçerek etkinlik önerileri alabilirsin
         </p>
+
         <div className="sign-up-form-interests-grid">
           {interests.map((interest) => (
             <SelectBox

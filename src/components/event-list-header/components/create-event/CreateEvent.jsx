@@ -205,7 +205,7 @@ function CreateEvent() {
         </div>
 
         <button className="create-event__form-submit-button" type="submit">
-          Etkinlik Oluştur
+          Etkinliği Oluştur
         </button>
       </form>
     </div>

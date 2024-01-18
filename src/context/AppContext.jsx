@@ -1,11 +1,14 @@
 import React, { createContext, useReducer } from "react";
 
 const initialState = {
-  user: (localStorage.getItem("email") && localStorage.getItem("token")) ? {
-    email: localStorage.getItem("email"),
-    token: localStorage.getItem("token"),
-  } : null,
-  
+  user:
+    localStorage.getItem("email") && localStorage.getItem("token")
+      ? {
+          email: localStorage.getItem("email"),
+          token: localStorage.getItem("token"),
+        }
+      : null,
+
   loading: false,
 };
 
@@ -21,10 +24,17 @@ const mainReducer = (state, action) => {
         ...state,
         user: action.payload,
       };
+
+    case "SET_USER_HAS_SELECTED_INTERESTS":
+      return {
+        ...state,
+        user: { ...state.user, userHasSelectedInterests: action.payload },
+      };
     case "LOGOUT":
       localStorage.removeItem("token");
       localStorage.removeItem("email");
-      
+      localStorage.removeItem("user-id");
+
       return {
         ...state,
         user: null,

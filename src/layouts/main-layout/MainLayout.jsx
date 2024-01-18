@@ -17,13 +17,13 @@ function MainLayoutWithPadding({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!state.user) {
-      navigate("/");
-    }
-
-    if (state.user && !state.user.userSelectedInterests) {
+    if (state.user && !state.user.userHasSelectedInterests) {
       dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
       dispatch({ type: "SET_MODAL_TITLE", payload: "İlgi Alanlarını Seç" });
+      dispatch({
+        type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+        payload: true,
+      });
       dispatch({
         type: "SET_MODAL_CONTENT",
         payload: <SignupInterestSelection />,

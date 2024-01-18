@@ -17,7 +17,10 @@ const SignInForm = () => {
 
   const handleSignUpLinkClick = () => {
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Kaydol" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -33,7 +36,11 @@ const SignInForm = () => {
   };
 
   const handleForgotPasswordClick = () => {
-    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
     dispatch({ type: "SET_MODAL_TITLE", payload: "Şifre Yenileme" });
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -131,19 +138,45 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
       if (response.status === 200) {
         const responseText = await response.text();
 
-        const token = responseText.split(" ")[1];
-        const id = responseText.split(" ")[2];
+        const id = responseText.split(" ")[1];
+        const email = responseText.split(" ")[3];
 
-        dispatch({
-          type: "LOGIN",
-          payload: { email: credentials.email, token: token, id: id },
-        });
+        console.log(email)
 
-        localStorage.setItem("token", token);
+        console.log(id)
 
-        modalDispatch({ type: "RESET_MODAL" });
+        fetch(`http://localhost:8080/user-interests/${id}/interests`)
+          .then((res) => {
+            if (res.ok) {
+              dispatch({
+                type: "LOGIN",
+                payload: { email: credentials.email, id: id },
+              });
 
-        navigate("/schedule-event");
+              dispatch({
+                type: "SET_USER_HAS_SELECTED_INTERESTS",
+                payload: true,
+              });
+              return res.json();
+            } else {
+              dispatch({
+                type: "SET_USER_HAS_SELECTED_INTERESTS",
+                payload: false,
+              });
+
+              dispatch({
+                type: "LOGIN",
+                payload: { email: credentials.email, id: id },
+              });
+
+              localStorage.setItem("user-id", id)
+      
+              modalDispatch({ type: "RESET_MODAL" });
+      
+              navigate("/schedule-event");
+            }
+          })
+          .catch((err) => console.log(err));
       } else {
         setShowInfoBox(true);
 

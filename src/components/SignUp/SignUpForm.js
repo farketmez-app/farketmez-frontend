@@ -124,8 +124,10 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
           payload: {
             email: res.mail,
             token: "token",
+            id: res.id
           },
         });
+        localStorage.setItem('user-id', res.id)
         navigate("/schedule-event");
       })
       .catch((err) => console.log(err));
