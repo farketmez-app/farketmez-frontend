@@ -182,6 +182,10 @@ function EventListHeader({ title, rightElement }) {
         </div>
       );
     }
+
+    if(!rightElement){
+      return <div/>
+    }
   }
 
   return (

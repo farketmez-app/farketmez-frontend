@@ -1,0 +1,14 @@
+.attended-events-page .event-list{
+    padding: 0 100px !important;
+    margin-bottom: 40px;
+}
+
+.attended-events-page .event-list .event-list-header__title{
+    font-weight: 600 !important;
+}
+
+.attended-events-page__go-back-button{
+    background-color: transparent;
+    margin-bottom: 40px;
+    color: #797979;
+}
