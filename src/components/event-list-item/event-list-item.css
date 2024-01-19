@@ -85,3 +85,8 @@
 .event-list-item__attend-button:hover {
   background: #ff6208;
 }
+
+.event-list-item__attend-button:disabled{
+  background: #b9b9b9;
+  cursor: not-allowed;
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./event-modal-content.css";
 
 // image assets
@@ -7,6 +7,8 @@ import StarUnfilledIcon from "../../../../assets/icons/star-unfilled.svg";
 import StarHalffilledIcon from "../../../../assets/icons/star-halffilled.svg";
 import LocationArrowIcon from "../../../../assets/icons/location-arrow.svg";
 import TickIcon from "../../../../assets/icons/tick.svg";
+import { AppContext } from "../../../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 function renderStars(rating) {
   const stars = [];
@@ -31,13 +33,28 @@ function renderStars(rating) {
 }
 
 function EventModalContent({ event }) {
+  const { state } = useContext(AppContext);
+  const navigate = useNavigate();
   const whereFormatted = event.where === "disarida" ? "Dışarıda" : "İçeride";
   const costFormatted =
     event.cost === "ucuz" ? "Ucuz" : event.cost === "orta" ? "Orta" : "Pahalı";
 
   //TODO: Make real requests in the following two functions after attending an event is done on backend side.
   function handleAttendEvent() {
-    console.log("attended");
+    fetch(
+      `http://localhost:8080/events/join?userId=${state.user.id}&eventId=${event.id}`,
+      {
+        method: "POST",
+      }
+    )
+      .then((res) => res.status)
+      .then((code) => {
+        if (code === 201) {
+          navigate("/attended-events");
+        } else {
+          console.log("hata", code);
+        }
+      });
   }
 
   function handleRedirectToGoogleMapsUrl() {
