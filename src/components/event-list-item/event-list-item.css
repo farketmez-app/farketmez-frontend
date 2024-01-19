@@ -51,6 +51,11 @@
   font-weight: 600;
 }
 
+.event-list-item-buttons-container {
+  display: flex;
+  gap: 8px;
+}
+
 .event-list-item__button {
   display: flex;
   align-items: center;
@@ -59,8 +64,29 @@
   width: 100%;
   background: #7520ff;
   color: white;
+  flex: 1;
 }
 
 .event-list-item__button:hover {
   background: #5a1ae0;
+}
+
+.event-list-item__attend-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: #ff7020;
+  color: white;
+  flex: 0.6;
+}
+
+.event-list-item__attend-button:hover {
+  background: #ff6208;
+}
+
+.event-list-item__attend-button:disabled{
+  background: #b9b9b9;
+  cursor: not-allowed;
 }

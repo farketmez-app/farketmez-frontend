@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./event-modal-content.css";
 
 // image assets
@@ -7,6 +7,8 @@ import StarUnfilledIcon from "../../../../assets/icons/star-unfilled.svg";
 import StarHalffilledIcon from "../../../../assets/icons/star-halffilled.svg";
 import LocationArrowIcon from "../../../../assets/icons/location-arrow.svg";
 import TickIcon from "../../../../assets/icons/tick.svg";
+import { AppContext } from "../../../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 function renderStars(rating) {
   const stars = [];
@@ -31,17 +33,41 @@ function renderStars(rating) {
 }
 
 function EventModalContent({ event }) {
+  const { state } = useContext(AppContext);
+  const navigate = useNavigate();
   const whereFormatted = event.where === "disarida" ? "Dışarıda" : "İçeride";
   const costFormatted =
     event.cost === "ucuz" ? "Ucuz" : event.cost === "orta" ? "Orta" : "Pahalı";
+
+  //TODO: Make real requests in the following two functions after attending an event is done on backend side.
+  function handleAttendEvent() {
+    fetch(
+      `http://localhost:8080/events/join?userId=${state.user.id}&eventId=${event.id}`,
+      {
+        method: "POST",
+      }
+    )
+      .then((res) => res.status)
+      .then((code) => {
+        if (code === 201) {
+          navigate("/attended-events");
+        } else {
+          console.log("hata", code);
+        }
+      });
+  }
+
+  function handleRedirectToGoogleMapsUrl() {
+    console.log("redirecting to google maps url");
+  }
 
   return (
     <div className="event-modal-content">
       <div className="event-modal-content__images">
         <div className="event-modal-content__images--left">
           <img
-          key={event.images[0]}
-          referrerpolicy="no-referrer"
+            key={event.images[0]}
+            referrerpolicy="no-referrer"
             src={event.images[0]}
             alt="event"
             className="event-modal-content__images--left--image"
@@ -50,16 +76,16 @@ function EventModalContent({ event }) {
 
         <div className="event-modal-content__images--right">
           <img
-          key={event.images[1]}
-          referrerpolicy="no-referrer"
+            key={event.images[1]}
+            referrerpolicy="no-referrer"
             src={event.images[1]}
             alt="event"
             className="event-modal-content__images--right--image"
           />
 
           <img
-          key={event.images[2]}
-          referrerpolicy="no-referrer"
+            key={event.images[2]}
+            referrerpolicy="no-referrer"
             src={event.images[2]}
             alt="event"
             className="event-modal-content__images--right--image"
@@ -89,17 +115,26 @@ function EventModalContent({ event }) {
 
       <div className="event-modal-content__title">{event.title}</div>
 
-      <button
-        onClick={() => window.open(event.googleMapsUrl)}
-        className="event-modal-content__button"
-      >
-        Konuma Git
-        <img
-          src={LocationArrowIcon}
-          alt="location-arrow"
-          className="event-modal-content__button--icon"
-        />
-      </button>
+      <div className="event-modal-content__buttons-container">
+        <button
+          onClick={handleAttendEvent}
+          className="event-modal-content__attend-button"
+        >
+          Katıl
+        </button>
+
+        <button
+          onClick={handleRedirectToGoogleMapsUrl}
+          className="event-modal-content__button"
+        >
+          Konuma Git
+          <img
+            src={LocationArrowIcon}
+            alt="location-arrow"
+            className="event-modal-content__button--icon"
+          />
+        </button>
+      </div>
     </div>
   );
 }
