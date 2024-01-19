@@ -139,14 +139,15 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
         const responseText = await response.text();
 
         const lines = responseText.split("\n");
-        const user_id = lines[0].split(": ")[1];
 
-        fetch(`http://localhost:8080/user-interests/${user_id}/interests`)
+        const id = lines[0].split(": ")[1];
+
+        fetch(`http://localhost:8080/user-interests/${id}/interests`)
           .then((res) => {
-            if (res.status === 200) {
+            if (res.ok) {
               dispatch({
                 type: "LOGIN",
-                payload: { email: credentials.email, id: user_id },
+                payload: { email: credentials.email, id: id },
               });
 
               dispatch({
@@ -161,7 +162,7 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
 
               dispatch({
                 type: "LOGIN",
-                payload: { email: credentials.email, id: user_id },
+                payload: { email: credentials.email, id: id },
               });
             }
           })

@@ -38,6 +38,7 @@ function MyEventsPage() {
         title={eventsListTitle}
         rightElement="button"
         fetching={fetching}
+        emptyListMessage={"Hiç etkinliğin yok. Hemen bir tane ekle"}
       />
     </div>
   );
