@@ -3,6 +3,22 @@
   flex-direction: column;
 }
 
+.attended-event-list-item--disappears {
+  animation: disappear-slide-left-to-right 1s ease-out forwards;
+}
+
+@keyframes disappear-slide-left-to-right {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(300px);
+  }
+}
+
 .attended-event-list-item-container {
   position: relative;
   display: flex;
@@ -33,4 +49,9 @@
   justify-content: center;
   position: relative;
   background: transparent;
+}
+
+.action-area-element_rating-rate-button:disabled{
+  color: #717171;
+  cursor: not-allowed;
 }

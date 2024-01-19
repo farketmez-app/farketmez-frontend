@@ -2,9 +2,9 @@ import React, { createContext, useReducer } from "react";
 
 const initialState = {
   user: {
-    email: null,
-    id: null,
-    userHasSelectedInterests: false,
+    email: "john@doe.com",
+    id: 2,
+    userHasSelectedInterests: true,
   },
 
   loading: false,

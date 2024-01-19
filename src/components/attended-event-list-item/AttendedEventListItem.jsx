@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./attended-event-list-item.css";
 import RatingStars from "../../pages/near-events-page/components/rating-stars/RatingStars";
 import LocationArrowIcon from "../../assets/icons/location-arrow.svg";
@@ -6,9 +6,12 @@ import { formatDateTime } from "../../core/utils";
 
 import StarFilled from "../../assets/icons/star-filled-orange.svg";
 import StarUnfilled from "../../assets/icons/star-unfilled-orange.svg";
+import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
 
 // attendedListItemType is "eventsNotRatedNotExpired" or "eventsNotRatedExpired" or "eventsRatedExpired"
 function AttendedEventListItem({ event, attendedListItemType }) {
+  const { state } = useContext(AppContext);
   const [stars, setStars] = useState(0);
 
   function handleRedirectToGoogleMapsUrl() {}
@@ -27,9 +30,28 @@ function AttendedEventListItem({ event, attendedListItemType }) {
         );
 
       case "eventsNotRatedExpired":
-        const handleStarClick = (index) => {
+        function handleStarClick(index) {
           setStars(index + 1);
-        };
+        }
+
+        function rateEvent() {
+          fetch("http://localhost:8080/participants/rate-event", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: state.user.id,
+              eventId: event.id,
+              rate: stars,
+            }),
+          }).then(()=>{
+            toast("Etkinlik Puanlandı 🌟",{
+              type:'success',
+              position:'top-center'
+            })
+          })
+        }
 
         return (
           <div className="action-area-element">
@@ -52,7 +74,11 @@ function AttendedEventListItem({ event, attendedListItemType }) {
                 ))}
               </div>
 
-              <button className="action-area-element_rating-rate-button">
+              <button
+              disabled={stars===0}
+                onClick={rateEvent}
+                className="action-area-element_rating-rate-button"
+              >
                 Puanla
               </button>
             </div>
@@ -60,13 +86,7 @@ function AttendedEventListItem({ event, attendedListItemType }) {
         );
 
       case "eventsRatedExpired":
-        return (
-          <div className="action-area-element">
-            <p className="action-area-element-title">
-              Etkinlik Değerlendirildi
-            </p>
-          </div>
-        );
+        return <div className="action-area-element"></div>;
 
       default:
         break;
@@ -74,7 +94,7 @@ function AttendedEventListItem({ event, attendedListItemType }) {
   }
 
   return (
-    <div className="attended-event-list-item event-list-item">
+    <div className={`attended-event-list-item event-list-item`}>
       <div className="attended-event-list-item-container">
         <div className={`event-list-item__image-container`}>
           <img

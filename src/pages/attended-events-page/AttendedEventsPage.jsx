@@ -12,7 +12,8 @@ function AttendedEventsPage() {
   const [eventsNotRatedExpired, setEventsNotRatedExpired] = useState([]);
   const [eventsNotRatedNotExpired, setEventsNotRatedNotExpired] = useState([]);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function getData() {
     const fetchingRatedExpiredEvents = fetch(
       `http://localhost:8080/participants/attended-rated-expired-events/${state.user.id}`
     ).then((res) => res.json());
@@ -44,16 +45,29 @@ function AttendedEventsPage() {
       .catch((error) => {
         console.error("Hata oluştu:", error);
       });
+  }
+
+  useEffect(() => {
+    getData();
   }, [state.user.id]);
 
   return (
     <div className="attended-events-page">
-      <button
-        onClick={() => navigate(-1)}
-        className="attended-events-page__go-back-button"
-      >
-        ⬅ Geri dön
-      </button>
+      <div className="attended-events-page-heading">
+        <button
+          onClick={() => navigate(-1)}
+          className="attended-events-page__go-back-button"
+        >
+          ⬅ Geri dön
+        </button>
+
+        <button
+          onClick={getData}
+          className="attended-events-page__go-back-button"
+        >
+          Yenile
+        </button>
+      </div>
 
       <EventList
         emptyListMessage={"Yakın tarihli bir etkinliğe kayıt olmadın 🙄"}
