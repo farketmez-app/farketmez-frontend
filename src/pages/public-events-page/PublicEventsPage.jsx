@@ -30,6 +30,7 @@ function PublicEventsPage() {
         title={eventsListTitle}
         rightElement="dropdown"
         fetching={fetching}
+        listItemType="standard"
       />
     </div>
   );
