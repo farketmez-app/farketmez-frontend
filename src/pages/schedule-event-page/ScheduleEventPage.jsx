@@ -28,7 +28,8 @@ const fakeFetchedData = {
 };
 
 function ScheduleEventPage() {
-  const { state, dispatch } = useContext(ModalContext);
+  const { dispatch } = useContext(ModalContext);
+  const [view, setView] = useState("farketmez"); // or 'algorithm' view
   const [value, onChange] = useState(new Date());
   const [time, setTime] = useState({ start: undefined, end: undefined });
   const [calendarOpened, setCalendarOpened] = useState(false);
@@ -116,277 +117,314 @@ function ScheduleEventPage() {
 
   return (
     <div className="schedule-event-page">
-      <section className="schedule-event-page__section schedule-event-page__section--where">
-        <p className="schedule-event-page__section__title">Nerede Olsun?</p>
+      <div className="schedule-event-page__view-switcher">
+        <button
+          onClick={() => setView("farketmez")}
+          className={`schedule-event-page__view-switch-button ${
+            view === "farketmez"
+              ? "schedule-event-page__view-switch-button--active"
+              : ""
+          }`}
+        >
+          Farketmez
+        </button>
 
-        <div className="schedule-event-page__section__content">
-          {where.map((item) => {
-            return (
-              <div
-                key={item.name}
-                onClick={() => {
-                  if (event.where.includes(item)) {
-                    setEvent({
-                      ...event,
-                      where: event.where.filter((where) => where !== item),
-                    });
-                  } else {
-                    setEvent({ ...event, where: [...event.where, item] });
-                  }
-                }}
-                className="schedule-event-page__section-item--where"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className={`schedule-event-page__section-item__image ${
-                    event.where.includes(item)
-                      ? "schedule-event-page__section-item__image--selected"
+        <button
+          onClick={() => setView("algorithm")}
+          className={`schedule-event-page__view-switch-button ${
+            view === "algorithm"
+              ? "schedule-event-page__view-switch-button--active"
+              : ""
+          }`}
+        >
+          Bana Uygun
+        </button>
+      </div>
+
+      {view === "farketmez" && (
+        <>
+          <section className="schedule-event-page__section schedule-event-page__section--where">
+            <p className="schedule-event-page__section__title">Nerede Olsun?</p>
+
+            <div className="schedule-event-page__section__content">
+              {where.map((item) => {
+                return (
+                  <div
+                    key={item.name}
+                    onClick={() => {
+                      if (event.where.includes(item)) {
+                        setEvent({
+                          ...event,
+                          where: event.where.filter((where) => where !== item),
+                        });
+                      } else {
+                        setEvent({ ...event, where: [...event.where, item] });
+                      }
+                    }}
+                    className="schedule-event-page__section-item--where"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className={`schedule-event-page__section-item__image ${
+                        event.where.includes(item)
+                          ? "schedule-event-page__section-item__image--selected"
+                          : ""
+                      }`}
+                    />
+
+                    <SelectBox
+                      customClassname={`schedule-event-page__section-item__select-box`}
+                      selectedOnes={event.where}
+                      option={item}
+                      toggleSelectBox={(option) => {
+                        if (event.where.includes(option)) {
+                          setEvent({
+                            ...event,
+                            where: event.where.filter(
+                              (where) => where !== option
+                            ),
+                          });
+                        } else {
+                          setEvent({
+                            ...event,
+                            where: [...event.where, option],
+                          });
+                        }
+                      }}
+                      text={item.name}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="schedule-event-page__section schedule-event-page__section--cost">
+            <p className="schedule-event-page__section__title">
+              Maliyeti Nasıl Olsun?
+            </p>
+
+            <div className="schedule-event-page__section__content">
+              {cost.map((item) => {
+                return (
+                  <div
+                    key={item.name}
+                    onClick={() => {
+                      if (event.cost.includes(item)) {
+                        setEvent({
+                          ...event,
+                          cost: event.cost.filter((c) => c !== item),
+                        });
+                      } else {
+                        setEvent({ ...event, cost: [...event.cost, item] });
+                      }
+                    }}
+                    className="schedule-event-page__section-item--where"
+                  >
+                    <SelectBox
+                      customClassname={`schedule-event-page__section-item__select-box`}
+                      selectedOnes={event.cost}
+                      option={item}
+                      toggleSelectBox={(option) => {
+                        if (event.cost.includes(option)) {
+                          setEvent({
+                            ...event,
+                            cost: event.cost.filter((c) => c !== option),
+                          });
+                        } else {
+                          setEvent({ ...event, cost: [...event.cost, option] });
+                        }
+                      }}
+                      text={item.name}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="schedule-event-page__section schedule-event-page__section--date">
+            <p className="schedule-event-page__section__title">
+              Ne Zaman Katılacaksın?
+            </p>
+
+            <div className="schedule-event-page__section__content">
+              <div className="schedule-event-page__section-inner-content-date">
+                <button
+                  className={`schedule-event-page__section-item--date-today-button  ${
+                    event.date === "Bugün"
+                      ? "schedule-event-page__section-item--date-today-button--selected"
                       : ""
                   }`}
-                />
-
-                <SelectBox
-                  customClassname={`schedule-event-page__section-item__select-box`}
-                  selectedOnes={event.where}
-                  option={item}
-                  toggleSelectBox={(option) => {
-                    if (event.where.includes(option)) {
-                      setEvent({
-                        ...event,
-                        where: event.where.filter((where) => where !== option),
-                      });
-                    } else {
-                      setEvent({ ...event, where: [...event.where, option] });
-                    }
-                  }}
-                  text={item.name}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="schedule-event-page__section schedule-event-page__section--cost">
-        <p className="schedule-event-page__section__title">
-          Maliyeti Nasıl Olsun?
-        </p>
-
-        <div className="schedule-event-page__section__content">
-          {cost.map((item) => {
-            return (
-              <div
-                key={item.name}
-                onClick={() => {
-                  if (event.cost.includes(item)) {
-                    setEvent({
-                      ...event,
-                      cost: event.cost.filter((c) => c !== item),
-                    });
-                  } else {
-                    setEvent({ ...event, cost: [...event.cost, item] });
-                  }
-                }}
-                className="schedule-event-page__section-item--where"
-              >
-                <SelectBox
-                  customClassname={`schedule-event-page__section-item__select-box`}
-                  selectedOnes={event.cost}
-                  option={item}
-                  toggleSelectBox={(option) => {
-                    if (event.cost.includes(option)) {
-                      setEvent({
-                        ...event,
-                        cost: event.cost.filter((c) => c !== option),
-                      });
-                    } else {
-                      setEvent({ ...event, cost: [...event.cost, option] });
-                    }
-                  }}
-                  text={item.name}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="schedule-event-page__section schedule-event-page__section--date">
-        <p className="schedule-event-page__section__title">
-          Ne Zaman Katılacaksın?
-        </p>
-
-        <div className="schedule-event-page__section__content">
-          <div className="schedule-event-page__section-inner-content-date">
-            <button
-              className={`schedule-event-page__section-item--date-today-button  ${
-                event.date === "Bugün"
-                  ? "schedule-event-page__section-item--date-today-button--selected"
-                  : ""
-              }`}
-              onClick={() => {
-                setEvent({ ...event, date: "Bugün" });
-                setTime({ start: undefined, end: undefined });
-                onChange(new Date());
-              }}
-            >
-              Bugün
-            </button>
-
-            <p style={{ display: "flex", alignItems: "center" }}>
-              <span>veya</span>
-            </p>
-            <div className="schedule-event-page__section-inner-content-date__date-picker">
-              <DatePicker
-                onChange={onChange}
-                onCalendarOpen={() => {
-                  setCalendarOpened(true);
-                }}
-                onCalendarClose={() => {
-                  setCalendarOpened(false);
-                }}
-                value={value}
-                calendarIcon={
-                  calendarOpened ? (
-                    <i class="bi bi-arrow-down-short"></i>
-                  ) : (
-                    <i class="bi bi-arrow-up-short"></i>
-                  )
-                }
-              />
-
-              <div className="schedule-event-page__section-inner-content-date__date-picker__time-selector">
-                <button
                   onClick={() => {
-                    if (!timeSelectorOpened && time.start && time.end) {
-                      setTime({ start: undefined, end: undefined });
-                    }
-
-                    setTimeSelectorOpened(!timeSelectorOpened);
-                  }}
-                  className="schedule-event-page__section-item--time-selector"
-                  style={{
-                    border:
-                      (time.start && time.end) || time.allDay
-                        ? "1px solid #6100ff"
-                        : "1px solid #ccc",
+                    setEvent({ ...event, date: "Bugün" });
+                    setTime({ start: undefined, end: undefined });
+                    onChange(new Date());
                   }}
                 >
-                  {(time.start && (
-                    <span className="schedule-event-page__section-item--time-selector__start">
-                      {time.start} - {time.end}
-                    </span>
-                  )) ||
-                    "Tüm Gün"}
-                  {!timeSelectorOpened ? (
-                    <i class="bi bi-arrow-up-short"></i>
-                  ) : (
-                    <i class="bi bi-arrow-down-short"></i>
-                  )}
+                  Bugün
                 </button>
 
-                {timeSelectorOpened && (
-                  <div
-                    ref={timeSelectionRef}
-                    className="schedule-event-page__section-inner-content-date__date-picker__time-selector__options"
-                  >
-                    {times.map((item) => {
-                      return (
-                        <button
-                          key={item}
-                          style={{
-                            backgroundColor:
-                              time.start === item || time.end === item
-                                ? "yellow"
-                                : "",
-                            border:
-                              time.start &&
-                              time.end &&
-                              (Number(time.start.split(":")[0]) <
-                                Number(item.split(":")[0]) &&
-                              Number(time.end.split(":")[0]) >
-                                Number(item.split(":")[0])
-                                ? "1px solid #ccc"
-                                : ""),
-                          }}
-                          onClick={() => {
-                            if (item === "Tüm Gün") {
-                              setTime({
-                                start: undefined,
-                                end: undefined,
-                                allDay: true,
-                              });
-                              setTimeSelectorOpened(false);
-                              return;
-                            }
+                <p style={{ display: "flex", alignItems: "center" }}>
+                  <span>veya</span>
+                </p>
+                <div className="schedule-event-page__section-inner-content-date__date-picker">
+                  <DatePicker
+                    onChange={onChange}
+                    onCalendarOpen={() => {
+                      setCalendarOpened(true);
+                    }}
+                    onCalendarClose={() => {
+                      setCalendarOpened(false);
+                    }}
+                    value={value}
+                    calendarIcon={
+                      calendarOpened ? (
+                        <i class="bi bi-arrow-down-short"></i>
+                      ) : (
+                        <i class="bi bi-arrow-up-short"></i>
+                      )
+                    }
+                  />
 
-                            if (!time.start) {
-                              setTime({ ...time, start: item });
-                            }
+                  <div className="schedule-event-page__section-inner-content-date__date-picker__time-selector">
+                    <button
+                      onClick={() => {
+                        if (!timeSelectorOpened && time.start && time.end) {
+                          setTime({ start: undefined, end: undefined });
+                        }
 
-                            if (time.start && !time.end) {
-                              setTime({ ...time, end: item });
-                            }
-                          }}
-                          className="schedule-event-page__section-inner-content-date__date-picker__time-selector__options__option"
-                        >
-                          {item}
-                        </button>
-                      );
-                    })}
+                        setTimeSelectorOpened(!timeSelectorOpened);
+                      }}
+                      className="schedule-event-page__section-item--time-selector"
+                      style={{
+                        border:
+                          (time.start && time.end) || time.allDay
+                            ? "1px solid #6100ff"
+                            : "1px solid #ccc",
+                      }}
+                    >
+                      {(time.start && (
+                        <span className="schedule-event-page__section-item--time-selector__start">
+                          {time.start} - {time.end}
+                        </span>
+                      )) ||
+                        "Tüm Gün"}
+                      {!timeSelectorOpened ? (
+                        <i class="bi bi-arrow-up-short"></i>
+                      ) : (
+                        <i class="bi bi-arrow-down-short"></i>
+                      )}
+                    </button>
+
+                    {timeSelectorOpened && (
+                      <div
+                        ref={timeSelectionRef}
+                        className="schedule-event-page__section-inner-content-date__date-picker__time-selector__options"
+                      >
+                        {times.map((item) => {
+                          return (
+                            <button
+                              key={item}
+                              style={{
+                                backgroundColor:
+                                  time.start === item || time.end === item
+                                    ? "yellow"
+                                    : "",
+                                border:
+                                  time.start &&
+                                  time.end &&
+                                  (Number(time.start.split(":")[0]) <
+                                    Number(item.split(":")[0]) &&
+                                  Number(time.end.split(":")[0]) >
+                                    Number(item.split(":")[0])
+                                    ? "1px solid #ccc"
+                                    : ""),
+                              }}
+                              onClick={() => {
+                                if (item === "Tüm Gün") {
+                                  setTime({
+                                    start: undefined,
+                                    end: undefined,
+                                    allDay: true,
+                                  });
+                                  setTimeSelectorOpened(false);
+                                  return;
+                                }
+
+                                if (!time.start) {
+                                  setTime({ ...time, start: item });
+                                }
+
+                                if (time.start && !time.end) {
+                                  setTime({ ...time, end: item });
+                                }
+                              }}
+                              className="schedule-event-page__section-inner-content-date__date-picker__time-selector__options__option"
+                            >
+                              {item}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section className="schedule-event-page__section schedule-event-page__section--pool">
-        <p className="schedule-event-page__section__title">
-          Etkinlik Havuzunu Seç
-        </p>
+          <section className="schedule-event-page__section schedule-event-page__section--pool">
+            <p className="schedule-event-page__section__title">
+              Etkinlik Havuzunu Seç
+            </p>
 
-        <div className="schedule-event-page__section__content">
-          {pools.map((item) => {
-            return (
-              <div
-                key={item.name}
-                onClick={() => {
-                  if (event.pool.includes(item)) {
-                    setEvent({
-                      ...event,
-                      pool: event.pool.filter((pool) => pool !== item),
-                    });
-                  } else {
-                    setEvent({ ...event, pool: [...event.pool, item] });
-                  }
-                }}
-                className="schedule-event-page__section-item--where"
-              >
-                <SelectBox
-                  customClassname={`schedule-event-page__section-item__select-box`}
-                  selectedOnes={event.pool}
-                  option={item}
-                  toggleSelectBox={(option) => {
-                    if (event.pool.includes(option)) {
-                      setEvent({
-                        ...event,
-                        pool: event.pool.filter((pool) => pool !== option),
-                      });
-                    } else {
-                      setEvent({ ...event, pool: [...event.pool, option] });
-                    }
-                  }}
-                  text={item.name}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
+            <div className="schedule-event-page__section__content">
+              {pools.map((item) => {
+                return (
+                  <div
+                    key={item.name}
+                    onClick={() => {
+                      if (event.pool.includes(item)) {
+                        setEvent({
+                          ...event,
+                          pool: event.pool.filter((pool) => pool !== item),
+                        });
+                      } else {
+                        setEvent({ ...event, pool: [...event.pool, item] });
+                      }
+                    }}
+                    className="schedule-event-page__section-item--where"
+                  >
+                    <SelectBox
+                      customClassname={`schedule-event-page__section-item__select-box`}
+                      selectedOnes={event.pool}
+                      option={item}
+                      toggleSelectBox={(option) => {
+                        if (event.pool.includes(option)) {
+                          setEvent({
+                            ...event,
+                            pool: event.pool.filter((pool) => pool !== option),
+                          });
+                        } else {
+                          setEvent({ ...event, pool: [...event.pool, option] });
+                        }
+                      }}
+                      text={item.name}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        </>
+      )}
 
+      {
+        view === "algorithm" // TODO: return other view here}
+      }
+      
       <button
         disabled={
           event.where.length === 0 ||

@@ -3,6 +3,26 @@
   padding-bottom: 100px;
 }
 
+.schedule-event-page__view-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.schedule-event-page__view-switch-button {
+  flex: 1;
+  background: none;
+  border-radius: 0;
+  border-bottom: 1px solid transparent;
+  transition: all 100ms ease-in;
+}
+
+.schedule-event-page__view-switch-button--active{
+  border-bottom: 1px solid #6100ff;
+  color:#5400dc;
+}
+
 .schedule-event-page__section {
   width: 100%;
 }
