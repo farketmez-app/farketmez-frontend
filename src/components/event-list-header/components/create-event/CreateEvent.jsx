@@ -16,8 +16,8 @@ function CreateEvent() {
     location: "",
     date: "",
     time: "",
-    cost: "",
-    place: "",
+    cost: "Ucuz",
+    place: "Dışarda",
     public: true,
   });
   const [currentLocation, setCurrentLocation] = useState({
@@ -43,6 +43,69 @@ function CreateEvent() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const now = new Date();
+    const formattedDateNow = now.toISOString().slice(0, 16);
+
+    let eventToRequest = {
+      isActive: true,
+      isPrivate: !newEvent.public,
+      title: newEvent.name,
+      cost: newEvent.cost,
+      place: newEvent.place,
+      description: "empty description",
+      averageRating: 0,
+      date: newEvent.date + "T" + newEvent.time,
+      createdAt: formattedDateNow,
+      updatedAt: formattedDateNow,
+      deletedAt: null,
+      eventType: {
+        id: 1,
+        type: "User_Event",
+      },
+      location: null,
+    };
+
+    if (newEvent.place === "Dışarda" || newEvent.place === "Mekanda") {
+      eventToRequest = {
+        ...eventToRequest,
+        location: {
+          id: 1,
+          latitude: -1,
+          longitude: -1,
+          googleMapsUrl: newEvent.location,
+        },
+      };
+    } else {
+      eventToRequest = {
+        ...eventToRequest,
+        location: {
+          id: 1,
+          latitude: newEvent.location.lat,
+          longitude: newEvent.location.lng,
+          googleMapsUrl: "",
+        },
+      };
+    }
+
+    return;
+
+    fetch(`http://localhost:8080/events`, {
+      method: "POST",
+      body: JSON.stringify(eventToRequest),
+    })
+      .then((res) => {
+        if (res.status === 403) {
+          return null;
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+
+        console.log(data);
+      });
   }
 
   const containerStyle = {
@@ -137,6 +200,14 @@ function CreateEvent() {
                     lat: e.latLng.lat(),
                     lng: e.latLng.lng(),
                   });
+
+                  setNewEvent({
+                    ...newEvent,
+                    location: {
+                      lat: e.latLng.lat(),
+                      lng: e.latLng.lng(),
+                    },
+                  });
                 }}
                 streetView={false}
                 options={{ disableDefaultUI: true }}
@@ -204,7 +275,16 @@ function CreateEvent() {
           </div>
         </div>
 
-        <button className="create-event__form-submit-button" type="submit">
+        <button
+          disabled={
+            !newEvent.name ||
+            !newEvent.date ||
+            !newEvent.time ||
+            !newEvent.location
+          }
+          className="create-event__form-submit-button"
+          type="submit"
+        >
           Etkinliği Oluştur
         </button>
       </form>
