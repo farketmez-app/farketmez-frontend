@@ -9,7 +9,7 @@ import CurrentLocationIcon from "../../../../assets/icons/current-location.png";
 function CreateEvent() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAE6pdkLwm7olOsw-JA1i8BpDn3eda6m9I",
+    googleMapsApiKey: "AIzaSyCSNPCiAr9U36c8a-ZbTxbl1c9VtxCOXu8",
   });
   const [newEvent, setNewEvent] = useState({
     name: "",

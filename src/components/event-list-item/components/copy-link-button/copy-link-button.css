@@ -1,7 +1,7 @@
 .copy-link-button {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 20px;
+  top: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
