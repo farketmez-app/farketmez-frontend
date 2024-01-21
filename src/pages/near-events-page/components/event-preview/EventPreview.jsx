@@ -79,7 +79,7 @@ function EventPreview({ event }) {
         <div className="event-preview__info">
           <div className="event-preview__info-header">
             <div className="event-preview__rating">
-              <RatingStars size={"large"} rating={event.rating} />
+              <RatingStars size={"large"} rating={event.averageRating} />
             </div>
 
             <div className="event-preview__where-and-cost-info">

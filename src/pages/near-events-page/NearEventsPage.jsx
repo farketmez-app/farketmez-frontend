@@ -1,87 +1,87 @@
-// TODO: Find a way to show a warning message that says "Please allow location access to see near events" if user doesn't allow location access
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import "./near-events-page.css";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import {
+  Circle,
+  GoogleMap,
+  Marker,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 import EventPopup from "./components/event-popup/EventPopup";
 import { NearEventsProvider } from "./context/nearEventsContext";
 import MarkerIcon from "../../assets/icons/marker.svg";
+import PinIcon from "../../assets/icons/pin-svg.svg";
 
-// TODO: readjust this after api integration
 const SETTING_NUMBER_OF_EVENTS_TIMEOUT = 1000;
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
 
-//TODO: remove this after api integration
-const fake = [
-  {
-    events: [
-      {
-        id: 1,
-        title: "Çay Evim",
-        lat: 39.7868915,
-        lng: 30.5163944,
-        rating: 4.5,
-        where: "Mekanda",
-        cost: "Orta",
-        images: [
-          "https://lh5.googleusercontent.com/p/AF1QipNrvV5lRi61RE8cfIlwA6M_jtZqPs04Bi5irhAN=w203-h360-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipMwdusasTby04GE1QGcCcelUBCyN4WZEcALTwB0=s1016-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipO7cfOyDBjY3ihoVRn_mSvQmVKmtbKrNUDTBNnu=s1016-k-no",
-        ],
-        commentsUrl: "https://www.google.com",
-      },
-      {
-        id: 2,
-        title: "Goril Burger'de burger yeme",
-        lat: 39.7868915,
-        lng: 30.5163944,
-        rating: 3.8,
-        where: "Mekanda",
-        cost: "Orta",
-        images: [
-          "https://lh5.googleusercontent.com/p/AF1QipPaTdQZRSCiRmRQbrN5v06zL5YkGK9xvNCrjjyi=w203-h270-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipMXI27sYpGOvi-pUmXYztV2WSmcubmioCaJJC9d=w203-h152-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipM95kLTJVNuc1hsOEr_dTh5cmdlUwTBs-4M6pMh=s901-k-no",
-        ],
-        commentsUrl: "https://www.google.com",
-      },
-    ],
-  },
-  {
-    events: [
-      {
-        id: 3,
-        title: "Kahve Dünyası",
-        lat: 39.7820174,
-        lng: 30.5171513,
-        rating: 4.8,
-        where: "Mekanda",
-        cost: "Pahalı",
-        images: [
-          "https://lh5.googleusercontent.com/p/AF1QipMTySpaj9z-U-QkTMmeRxikzkWsWhNFowzW0yrM=s1016-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipMGXARQQoiP_663gUVGd9IbVZ63UqxSQAyNk46U=w203-h157-k-no",
-          "https://lh5.googleusercontent.com/p/AF1QipN4kcUzN5aF0Svz5v8u92YZs6waxdJTPw1lisBS=s812-k-no",
-        ],
-        commentsUrl: "https://www.google.com",
-      },
-    ],
-  },
-];
-
 function NearEventsPage() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAE6pdkLwm7olOsw-JA1i8BpDn3eda6m9I",
+    googleMapsApiKey: "AIzaSyCSNPCiAr9U36c8a-ZbTxbl1c9VtxCOXu8",
   });
   const mapContainerRef = useRef(null);
   const eventContainerRef = useRef(null);
   const [mouseOverOnMarker, setMouseOverOnMarker] = useState(false);
   const [shouldShowEventPopup, setShouldShowEventPopup] = useState(false);
-  const [selectedMarker, setSelectedMarker] = useState(fake[0].events[0]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [locationEventPairs, setLocationEventPairs] = useState(null);
+
+  useEffect(() => {
+    if (!currentLocation) return;
+
+    fetch(
+      `http://localhost:8080/events/near-events?lat=${currentLocation.lng}&long=${currentLocation.lat}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((res) => {
+        if (res.status === 204) {
+          return [];
+        } else {
+          return res.json();
+        }
+      })
+      .then((events) => {
+        let locationEventPairs = [];
+
+        Object.entries(events).forEach((event) => {
+          const [lat, long] = event[0].split("=");
+
+          event[1].map(
+            (e) =>
+              (e.images = [
+                "https://lh5.googleusercontent.com/p/AF1QipMTySpaj9z-U-QkTMmeRxikzkWsWhNFowzW0yrM=s1016-k-no",
+                "https://lh5.googleusercontent.com/p/AF1QipMGXARQQoiP_663gUVGd9IbVZ63UqxSQAyNk46U=w203-h157-k-no",
+                "https://lh5.googleusercontent.com/p/AF1QipN4kcUzN5aF0Svz5v8u92YZs6waxdJTPw1lisBS=s812-k-no",
+              ])
+          );
+
+          event[1].map((e) => (e.commentsUrl = "https://www.google.com"));
+
+          event[1].map((e) => (e.where = e.place));
+
+          const eventPerLocation = {
+            lat: lat,
+            lng: long,
+            events: event[1],
+          };
+
+          locationEventPairs.push(eventPerLocation);
+        });
+
+        console.log(locationEventPairs);
+
+        setSelectedMarker(locationEventPairs[0].events[0]);
+
+        setLocationEventPairs(locationEventPairs);
+      })
+      .catch((err) => console.log("err getting near events", err));
+  }, [currentLocation]);
 
   // get current location
   useEffect(() => {
@@ -94,12 +94,14 @@ function NearEventsPage() {
 
   // add number to markers that has more than one event
   useEffect(() => {
-    if (!currentLocation) {
+    if (!currentLocation || !locationEventPairs || !isLoaded) {
       return;
     }
 
+    const div = document.querySelector(`[title="current location"]`);
+
     const timeOut = setTimeout(() => {
-      fake.forEach((item) => {
+      locationEventPairs.forEach((item) => {
         if (item.events.length === 1) {
           return;
         }
@@ -122,7 +124,7 @@ function NearEventsPage() {
     return () => {
       clearTimeout(timeOut);
     };
-  }, [currentLocation]);
+  }, [currentLocation, isLoaded, locationEventPairs, selectedMarker]);
 
   // create triangle canvas and append it to map container, show event popup
   const handleGetCursorLocationRelatedToMap = (e) => {
@@ -227,26 +229,55 @@ function NearEventsPage() {
         zoom={14}
         center={currentLocation}
       >
-        {fake.map((item, index) => {
-          return (
+        <Fragment key={"map fragment"}>
+          {currentLocation && (
             <Marker
-              onMouseOver={(e) => {
-                setMouseOverOnMarker(true);
-
-                if (selectedMarker && !shouldShowEventPopup) {
-                  setSelectedMarker(item);
-                }
-              }}
-              onMouseOut={(e) => {
-                setMouseOverOnMarker(false);
-              }}
               cursor="pointer"
-              title={item.events[0].title}
-              position={{ lat: item.events[0].lat, lng: item.events[0].lng }}
-              icon={MarkerIcon}
+              title={"current location"}
+              position={{
+                lat: currentLocation.lat,
+                lng: currentLocation.lng,
+              }}
+              icon={PinIcon}
             />
-          );
-        })}
+          )}
+
+          {currentLocation && (
+            <Circle
+              defaultCenter={{
+                lat: parseFloat(currentLocation.lat),
+                lng: parseFloat(currentLocation.lng),
+              }}
+              radius={3000}
+              options={{
+                strokeColor: "red",
+              }}
+            />
+          )}
+
+          {locationEventPairs &&
+            locationEventPairs.map((item, index) => (
+              <Marker
+                onMouseOver={(e) => {
+                  setMouseOverOnMarker(true);
+
+                  if (selectedMarker && !shouldShowEventPopup) {
+                    setSelectedMarker(item);
+                  }
+                }}
+                onMouseOut={(e) => {
+                  setMouseOverOnMarker(false);
+                }}
+                cursor="pointer"
+                title={item.events[0].title}
+                position={{
+                  lat: parseFloat(item.lng),
+                  lng: parseFloat(item.lat),
+                }}
+                icon={MarkerIcon}
+              />
+            ))}
+        </Fragment>
       </GoogleMap>
 
       {shouldShowEventPopup ? (

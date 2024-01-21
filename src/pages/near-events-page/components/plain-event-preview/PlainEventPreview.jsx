@@ -11,6 +11,7 @@ function PlainEventPreview({ event }) {
   const handleSetEventWantedToBeSeen = () => {
     dispatch({ type: "SET_PLAIN_EVENT_WANTED_TO_BE_SEEN", payload: event });
   };
+
   return (
     <button
       onClick={handleSetEventWantedToBeSeen}
@@ -18,7 +19,7 @@ function PlainEventPreview({ event }) {
     >
       <div className="plain-event-preview__container">
         <img
-        referrerPolicy="no-referrer"
+          referrerPolicy="no-referrer"
           className="plain-event-preview__image"
           src={event.images[0]}
           alt={event.title}
@@ -28,7 +29,7 @@ function PlainEventPreview({ event }) {
           <p className="plain-event-preview__title">{event.title}</p>
 
           <div className="plain-event-preview__rating">
-            <RatingStars rating={event.rating} />
+            <RatingStars rating={event.averageRating} />
           </div>
 
           <div className="plain-event-preview__where-and-cost-info">
