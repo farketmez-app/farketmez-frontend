@@ -9,7 +9,6 @@ function PublicEventsPage() {
 
   useEffect(() => {
     setFetching(true);
-    // TODO: CHANGE THIS WITH /public-events
     fetch("http://localhost:8080/events", {
       method: "GET",
       headers: {
@@ -18,7 +17,14 @@ function PublicEventsPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setEvents(data);
+        let filteredEvents = []
+        data.forEach(event => {
+          if(!event.isPrivate){
+            filteredEvents.push(event)
+          }
+        });
+
+        setEvents(filteredEvents);
         setFetching(false);
       });
   }, []);

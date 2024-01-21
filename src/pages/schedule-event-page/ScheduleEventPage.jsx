@@ -7,10 +7,15 @@ import "react-calendar/dist/Calendar.css";
 
 import SelectBox from "../../components/select-box/SelectBox";
 import { cost, pools, times, where } from "./constants";
+import { ModalContext } from "../../context/ModalContext";
+import { AppContext } from "../../context/AppContext";
+import EventModalContent from "./components/event-modal-content/EventModalContent";
 
 import SparksIcon from "../../assets/icons/sparks.svg";
-import { ModalContext } from "../../context/ModalContext";
-import EventModalContent from "./components/event-modal-content/EventModalContent";
+import ViewHeroImage from "../../assets/images/people-enjoying-hero.png";
+import DiscoverIcon from "../../assets/icons/discover.svg";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const fakeFetchedData = {
   title: "Regülatorde Tavuk Mangal",
@@ -28,7 +33,10 @@ const fakeFetchedData = {
 };
 
 function ScheduleEventPage() {
+  const navigate = useNavigate();
   const { dispatch } = useContext(ModalContext);
+  const { state } = useContext(AppContext);
+  const [userHasAttendedEvents, setUserHasAttendedEvents] = useState(false);
   const [view, setView] = useState("farketmez"); // or 'algorithm' view
   const [value, onChange] = useState(new Date());
   const [time, setTime] = useState({ start: undefined, end: undefined });
@@ -42,6 +50,24 @@ function ScheduleEventPage() {
   });
   const timeSelectionRef = useRef();
   const [fetchedEvent, setFetchedEvent] = useState({});
+
+  console.log(event);
+
+  // http://localhost:8080/events/suggestedevent-withparams?place=home&cost=cheap&date=15.01.2024&time=&pool=my-events&id=2
+
+  // check if user has attended any event before
+  useEffect(() => {
+    fetch(
+      `http://localhost:8080/participants/by-user-id/${state.user.id}`
+    ).then((res) => {
+      if (res.status === 404) {
+        setUserHasAttendedEvents(false);
+        return null;
+      }
+
+      setUserHasAttendedEvents(true);
+    });
+  }, [state.user.id]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -92,9 +118,29 @@ function ScheduleEventPage() {
   }, [time, value]);
 
   function handleFetchEvent() {
-    let fetchedEvent = {};
+    const url =
+      view === "farketmez"
+        ? `http://localhost:8080/events/suggestedevent-withparams?place=home&cost=cheap&date=&time=&pool=my-events&id=2`
+        : `http://localhost:8080/events/suggestedevent/${state.user.id}`;
+    try {
+      fetch(url)
+        .then((res) => res.json())
+        .then((event) => {
+          console.log(event);
+        })
+        .catch((err) => {
+          toast("Bir Hatayla Karşılaştık 🤔", {
+            position: "top-center",
+            type: "error",
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
 
-    const fetchDataPromise = new Promise((resolve, reject) => {
+    /**
+     Keep that to show if things go bad
+const fetchDataPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(fakeFetchedData);
       }, 1000);
@@ -113,6 +159,7 @@ function ScheduleEventPage() {
       dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
       dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
     });
+     */
   }
 
   return (
@@ -418,27 +465,70 @@ function ScheduleEventPage() {
               })}
             </div>
           </section>
+
+          <button
+            disabled={
+              event.where.length === 0 ||
+              event.cost.length === 0 ||
+              event.pool.length === 0
+            }
+            onClick={() => {
+              handleFetchEvent();
+            }}
+            className="schedule-event-page__button"
+          >
+            <span>Etkinlik Bul</span>
+            <img src={SparksIcon} alt="sparks" />
+          </button>
         </>
       )}
 
-      {
-        view === "algorithm" // TODO: return other view here}
-      }
-      
-      <button
-        disabled={
-          event.where.length === 0 ||
-          event.cost.length === 0 ||
-          event.pool.length === 0
-        }
-        onClick={() => {
-          handleFetchEvent();
-        }}
-        className="schedule-event-page__button"
-      >
-        <span>Etkinlik Bul</span>
-        <img src={SparksIcon} alt="sparks" />
-      </button>
+      {view === "algorithm" && (
+        <div className="schedule-event-page__section schedule-event-page__section--algorithm">
+          <div className="schedule-event-page__section--algorithm-hero">
+            <p className="schedule-event-page__section--algorithm-hero-title">
+              Sana Özel Etkinliği Şimdi Keşfet
+            </p>
+
+            <img
+              src={ViewHeroImage}
+              className="schedule-event-page__section--algorithm-hero-image"
+              alt="people enjoying"
+            />
+          </div>
+
+          <button
+            disabled={!userHasAttendedEvents}
+            onClick={() => {
+              handleFetchEvent();
+            }}
+            className="schedule-event-page__button"
+          >
+            <span>Etkinlik Bul</span>
+            <img src={SparksIcon} alt="sparks" />
+          </button>
+
+          {!userHasAttendedEvents && (
+            <div className="schedule-event-page__section--algorithm--no-attended-events">
+              <p className="schedule-event-page__section--algorithm--no-attended-events-text">
+                Seni daha yakından tanıyabilmemiz ve senin için en uygun
+                etkinlikleri önerebilmemiz için ilk önce birkaç etkinliğe
+                katılmanı öneriyoruz.
+              </p>
+
+              <button
+                onClick={() => {
+                  navigate("/public-events");
+                }}
+                className="schedule-event-page__button"
+              >
+                <span>Etkinlikleri Keşfet</span>
+                <img src={DiscoverIcon} alt="discover" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
