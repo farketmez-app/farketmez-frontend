@@ -8,6 +8,7 @@ const initialState = {
   },
 
   loading: false,
+  eventCreated: false,
 };
 
 const AppContext = createContext({
@@ -43,6 +44,12 @@ const mainReducer = (state, action) => {
       return {
         ...state,
         loading: action.payload,
+      };
+
+    case "SET_EVENT_CREATED":
+      return {
+        ...state,
+        eventCreated: action.payload,
       };
     default:
       throw new Error(`Unknown action type: ${action.type}`);

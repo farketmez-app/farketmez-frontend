@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./create-event.css";
+import { AppContext } from "../../../../context/AppContext";
 import LockIcon from "../../../../assets/icons/lock.png";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 import PinIcon from "../../../../assets/icons/pin.png";
 import CurrentLocationIcon from "../../../../assets/icons/current-location.png";
+import { toast } from "react-toastify";
+import { ModalContext } from "../../../../context/ModalContext";
 
 function CreateEvent() {
+  const { state, dispatch:appDispatch } = useContext(AppContext);
+  const { dispatch } = useContext(ModalContext);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyCSNPCiAr9U36c8a-ZbTxbl1c9VtxCOXu8",
@@ -48,6 +53,7 @@ function CreateEvent() {
     const formattedDateNow = now.toISOString().slice(0, 16);
 
     let eventToRequest = {
+      creatorId: state.user.id,
       isActive: true,
       isPrivate: !newEvent.public,
       title: newEvent.name,
@@ -83,18 +89,20 @@ function CreateEvent() {
           id: 1,
           latitude: newEvent.location.lat,
           longitude: newEvent.location.lng,
-          googleMapsUrl: "",
+          googleMapsUrl: null,
         },
       };
     }
 
-    return;
-
     fetch(`http://localhost:8080/events`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(eventToRequest),
     })
       .then((res) => {
+        console.log(res.status);
         if (res.status === 403) {
           return null;
         }
@@ -104,8 +112,26 @@ function CreateEvent() {
       .then((data) => {
         if (!data) return;
 
-        console.log(data);
-      });
+        toast("Etkinlik Başarıyla Oluşturuldu", {
+          type: "success",
+          position: "top-center",
+        });
+
+        if (data.accessKey) {
+          navigator.clipboard.writeText(
+            `http://locahost:3000/join/${data.accessKey}`
+          );
+          toast("Davet Linki Panoya Kopyalandı ✌🏼", {
+            type: "success",
+            position: "top-center",
+          });
+        }
+
+        appDispatch({type:'SET_EVENT_CREATED', payload:true})
+
+        dispatch({ type: "RESET_MODAL" });
+      })
+      .catch((err) => console.log("error", err));
   }
 
   const containerStyle = {
