@@ -106,7 +106,10 @@ function EventListItem({ event }) {
               onClick={handleAttendToEvent}
               className="event-list-item__attend-button"
             >
-              Katıl
+              {eventsThatUserJoins.includes(event.id)
+                ? "Katılıyorsun"
+                : "Katıl"}
+
             </button>
           )}
 
