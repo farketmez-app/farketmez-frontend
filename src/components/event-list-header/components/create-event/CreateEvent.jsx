@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./create-event.css";
+import { AppContext } from "../../../../context/AppContext";
 import LockIcon from "../../../../assets/icons/lock.png";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 import PinIcon from "../../../../assets/icons/pin.png";
 import CurrentLocationIcon from "../../../../assets/icons/current-location.png";
+import { toast } from "react-toastify";
+import { ModalContext } from "../../../../context/ModalContext";
 
 function CreateEvent() {
+  const { state, dispatch:appDispatch } = useContext(AppContext);
+  const { dispatch } = useContext(ModalContext);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyCSNPCiAr9U36c8a-ZbTxbl1c9VtxCOXu8",
@@ -16,8 +21,8 @@ function CreateEvent() {
     location: "",
     date: "",
     time: "",
-    cost: "",
-    place: "",
+    cost: "Ucuz",
+    place: "Dışarda",
     public: true,
   });
   const [currentLocation, setCurrentLocation] = useState({
@@ -43,6 +48,90 @@ function CreateEvent() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const now = new Date();
+    const formattedDateNow = now.toISOString().slice(0, 16);
+
+    let eventToRequest = {
+      creatorId: state.user.id,
+      isActive: true,
+      isPrivate: !newEvent.public,
+      title: newEvent.name,
+      cost: newEvent.cost,
+      place: newEvent.place,
+      description: "empty description",
+      averageRating: 0,
+      date: newEvent.date + "T" + newEvent.time,
+      createdAt: formattedDateNow,
+      updatedAt: formattedDateNow,
+      deletedAt: null,
+      eventType: {
+        id: 1,
+        type: "User_Event",
+      },
+      location: null,
+    };
+
+    if (newEvent.place === "Dışarda" || newEvent.place === "Mekanda") {
+      eventToRequest = {
+        ...eventToRequest,
+        location: {
+          id: 1,
+          latitude: -1,
+          longitude: -1,
+          googleMapsUrl: newEvent.location,
+        },
+      };
+    } else {
+      eventToRequest = {
+        ...eventToRequest,
+        location: {
+          id: 1,
+          latitude: newEvent.location.lat,
+          longitude: newEvent.location.lng,
+          googleMapsUrl: null,
+        },
+      };
+    }
+
+    fetch(`http://localhost:8080/events`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(eventToRequest),
+    })
+      .then((res) => {
+        console.log(res.status);
+        if (res.status === 403) {
+          return null;
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+
+        toast("Etkinlik Başarıyla Oluşturuldu", {
+          type: "success",
+          position: "top-center",
+        });
+
+        if (data.accessKey) {
+          navigator.clipboard.writeText(
+            `http://locahost:3000/join/${data.accessKey}`
+          );
+          toast("Davet Linki Panoya Kopyalandı ✌🏼", {
+            type: "success",
+            position: "top-center",
+          });
+        }
+
+        appDispatch({type:'SET_EVENT_CREATED', payload:true})
+
+        dispatch({ type: "RESET_MODAL" });
+      })
+      .catch((err) => console.log("error", err));
   }
 
   const containerStyle = {
@@ -137,6 +226,14 @@ function CreateEvent() {
                     lat: e.latLng.lat(),
                     lng: e.latLng.lng(),
                   });
+
+                  setNewEvent({
+                    ...newEvent,
+                    location: {
+                      lat: e.latLng.lat(),
+                      lng: e.latLng.lng(),
+                    },
+                  });
                 }}
                 streetView={false}
                 options={{ disableDefaultUI: true }}
@@ -204,7 +301,16 @@ function CreateEvent() {
           </div>
         </div>
 
-        <button className="create-event__form-submit-button" type="submit">
+        <button
+          disabled={
+            !newEvent.name ||
+            !newEvent.date ||
+            !newEvent.time ||
+            !newEvent.location
+          }
+          className="create-event__form-submit-button"
+          type="submit"
+        >
           Etkinliği Oluştur
         </button>
       </form>

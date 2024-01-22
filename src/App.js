@@ -17,6 +17,7 @@ import MainLayout from "./layouts/main-layout/MainLayout";
 import { DropdownProvider } from "./context/DropdownContext";
 import AccountSettingsPage from "./pages/account-settings-page/AccountSettingsPage";
 import AccountDropdown from "./components/header/components/account-dropdown/AccountDropdown";
+import JoinEventPage from "./pages/join-event-page/JoinEventPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -104,6 +105,17 @@ function App() {
         <DropdownProvider>
           <MainLayout shouldShowSwitcher={false}>
             <AccountSettingsPage />
+
+            <AccountDropdown />
+          </MainLayout>
+        </DropdownProvider>
+      ),
+    },{
+      path: "/join/:accessKey",
+      element: (
+        <DropdownProvider>
+          <MainLayout shouldShowSwitcher={false}>
+            <JoinEventPage />
 
             <AccountDropdown />
           </MainLayout>

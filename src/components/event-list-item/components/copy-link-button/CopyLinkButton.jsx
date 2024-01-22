@@ -2,9 +2,11 @@ import React from "react";
 import "./copy-link-button.css";
 
 import LinkIcon from "../../../../assets/icons/link-purple.png";
+import { toast } from "react-toastify";
 
 function CopyLinkButton({ link }) {
   function copyToClipboard() {
+    toast("Panoya Kopyalandı", { type: "success", position: "top-center" });
     navigator.clipboard.writeText(link);
   }
   return (

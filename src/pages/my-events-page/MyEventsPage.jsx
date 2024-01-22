@@ -7,7 +7,7 @@ import { AppContext } from "../../context/AppContext";
 function MyEventsPage() {
   const [myEvents, setMyEvents] = useState([]);
   const [fetching, setfetching] = useState(false);
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
     setfetching(true);
@@ -29,7 +29,13 @@ function MyEventsPage() {
       .catch((err) => {
         console.log(err);
       });
-  }, [state.user.id]);
+
+      if(state.eventCreated){
+        dispatch({type:'SET_EVENT_CREATED',payload:false})
+      }
+  }, [state.user.id, state.eventCreated]);
+
+  console.log(myEvents)
 
   return (
     <div className="my-events-page">
@@ -39,6 +45,7 @@ function MyEventsPage() {
         rightElement="button"
         fetching={fetching}
         emptyListMessage={"Hiç etkinliğin yok. Hemen bir tane ekle"}
+        listItemType="standard"
       />
     </div>
   );

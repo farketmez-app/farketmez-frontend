@@ -125,10 +125,14 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
           payload: {
             email: res.mail,
             id: res.id,
-            userHasSelectedInterests:false
+            userHasSelectedInterests: false,
           },
         });
-        
+
+        localStorage.setItem("id", res.id);
+        localStorage.setItem("email", res.mail);
+        localStorage.setItem("selected-interests", false);
+
         navigate("/schedule-event");
       })
       .catch((err) => console.log(err));
