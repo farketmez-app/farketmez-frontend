@@ -33,6 +33,8 @@ function AccountDropdown() {
       onClick: () => {
         appContextDispatch({ type: "LOGOUT" });
         dispatch({ type: "CLOSE_DROPDOWN" });
+        localStorage.clear();
+        
         navigate("/");
       },
     },

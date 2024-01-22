@@ -44,9 +44,9 @@ function EventListItem({ event }) {
       .then((res) => res.status)
       .then((code) => {
         if (code === 201) {
-          setEventsThatUserJoins(prev=>[...prev, event.id])
-          
-          navigate('/attended-events')
+          setEventsThatUserJoins((prev) => [...prev, event.id]);
+
+          navigate("/attended-events");
         } else {
           console.log("hata", code);
         }
@@ -96,7 +96,7 @@ function EventListItem({ event }) {
 
         <div className="event-list-item-buttons-container">
           <button
-          disabled={eventsThatUserJoins.includes(event.id)}
+            disabled={eventsThatUserJoins.includes(event.id)}
             onClick={handleAttendToEvent}
             className="event-list-item__attend-button"
           >

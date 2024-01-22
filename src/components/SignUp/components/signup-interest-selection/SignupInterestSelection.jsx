@@ -34,6 +34,7 @@ function SignupInterestSelection() {
         res.json();
       })
       .then((data) => {
+        localStorage.setItem('selected-interests', true)
         dispatch({ type: "SET_USER_HAS_SELECTED_INTERESTS", payload: true });
         modalDispatch({ type: "RESET_MODAL" });
       })
