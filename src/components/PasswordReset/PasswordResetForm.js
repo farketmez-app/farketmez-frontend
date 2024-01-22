@@ -26,7 +26,7 @@ const PasswordResetForm = ({ onClose }) => {
         className="password-reset-form-back-button"
         onClick={() => handleNavigateBack()}
       >
-        <i class="bi bi-arrow-left-short"></i>
+        <i className="bi bi-arrow-left-short"></i>
         <p className="password-reset-form-back-button-text">Geri dön</p>
       </button>
 

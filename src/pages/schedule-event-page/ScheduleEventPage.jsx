@@ -51,8 +51,6 @@ function ScheduleEventPage() {
   const timeSelectionRef = useRef();
   const [fetchedEvent, setFetchedEvent] = useState({});
 
-  console.log(event);
-
   // http://localhost:8080/events/suggestedevent-withparams?place=home&cost=cheap&date=15.01.2024&time=&pool=my-events&id=2
 
   // check if user has attended any event before
@@ -120,13 +118,62 @@ function ScheduleEventPage() {
   function handleFetchEvent() {
     const url =
       view === "farketmez"
-        ? `http://localhost:8080/events/suggestedevent-withparams?place=home&cost=cheap&date=&time=&pool=my-events&id=2`
+        ? `http://localhost:8080/events/suggestedevent-withparams?place=outdoor&cost=expensive&date=24.01.2024&time=09-18&pool=public-events&id=2`
         : `http://localhost:8080/events/suggestedevent/${state.user.id}`;
     try {
+      /**
+      const [rawDate, timeRange] = event.date.split(" ");
+      const [day, month, year] = rawDate
+        .split("/")
+        .map((part) => parseInt(part));
+
+      const [startTime, endTime] = timeRange.split(" - ");
+
+      // Ay değerini 1 artırarak tarih değerini oluşturalım
+      const dateWithDots = `${day.toString().padStart(2, "0")}.${(month + 1)
+        .toString()
+        .padStart(2, "0")}.${year}`;
+      const timeParam =
+        startTime.substring(0, 2) + "-" + time.end.substring(0, 2);
+      let placeParam =event.where[0].code;
+
+      let costParam = event.cost[0].code;
+
+      let poolParam = event.pool[0].code;
+
+      console.log(`http://localhost:8080/events/suggestedevent-withparams?
+      place=${placeParam}
+      &cost=${costParam}
+      &date=${dateWithDots}
+      &time=${timeParam}
+      &pool=${poolParam}
+      &id=${state.user.id}`); */
+
       fetch(url)
         .then((res) => res.json())
         .then((event) => {
-          console.log(event);
+          dispatch({
+            type: "SET_MODAL_CONTENT",
+            payload: (
+              <EventModalContent
+                event={{
+                  ...event,
+                  images: [
+                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                  ],
+                }}
+              />
+            ),
+          });
+          dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+          dispatch({
+            type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+            payload: true,
+          });
+          dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+          dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
         })
         .catch((err) => {
           toast("Bir Hatayla Karşılaştık 🤔", {
@@ -161,6 +208,8 @@ const fetchDataPromise = new Promise((resolve, reject) => {
     });
      */
   }
+
+  console.log(event.where);
 
   return (
     <div className="schedule-event-page">
@@ -199,14 +248,7 @@ const fetchDataPromise = new Promise((resolve, reject) => {
                   <div
                     key={item.name}
                     onClick={() => {
-                      if (event.where.includes(item)) {
-                        setEvent({
-                          ...event,
-                          where: event.where.filter((where) => where !== item),
-                        });
-                      } else {
-                        setEvent({ ...event, where: [...event.where, item] });
-                      }
+                      setEvent({ ...event, where: [item] });
                     }}
                     className="schedule-event-page__section-item--where"
                   >
@@ -258,14 +300,7 @@ const fetchDataPromise = new Promise((resolve, reject) => {
                   <div
                     key={item.name}
                     onClick={() => {
-                      if (event.cost.includes(item)) {
-                        setEvent({
-                          ...event,
-                          cost: event.cost.filter((c) => c !== item),
-                        });
-                      } else {
-                        setEvent({ ...event, cost: [...event.cost, item] });
-                      }
+                      setEvent({ ...event, cost: [item] });
                     }}
                     className="schedule-event-page__section-item--where"
                   >
@@ -328,9 +363,9 @@ const fetchDataPromise = new Promise((resolve, reject) => {
                     value={value}
                     calendarIcon={
                       calendarOpened ? (
-                        <i class="bi bi-arrow-down-short"></i>
+                        <i className="bi bi-arrow-down-short"></i>
                       ) : (
-                        <i class="bi bi-arrow-up-short"></i>
+                        <i className="bi bi-arrow-up-short"></i>
                       )
                     }
                   />
@@ -359,9 +394,9 @@ const fetchDataPromise = new Promise((resolve, reject) => {
                       )) ||
                         "Tüm Gün"}
                       {!timeSelectorOpened ? (
-                        <i class="bi bi-arrow-up-short"></i>
+                        <i className="bi bi-arrow-up-short"></i>
                       ) : (
-                        <i class="bi bi-arrow-down-short"></i>
+                        <i className="bi bi-arrow-down-short"></i>
                       )}
                     </button>
 
@@ -433,14 +468,7 @@ const fetchDataPromise = new Promise((resolve, reject) => {
                   <div
                     key={item.name}
                     onClick={() => {
-                      if (event.pool.includes(item)) {
-                        setEvent({
-                          ...event,
-                          pool: event.pool.filter((pool) => pool !== item),
-                        });
-                      } else {
-                        setEvent({ ...event, pool: [...event.pool, item] });
-                      }
+                      setEvent({ ...event, pool: [item] });
                     }}
                     className="schedule-event-page__section-item--where"
                   >

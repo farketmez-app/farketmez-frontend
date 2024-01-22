@@ -127,7 +127,7 @@ function EventModalContent({ event }) {
           onClick={handleRedirectToGoogleMapsUrl}
           className="event-modal-content__button"
         >
-          Konuma Git
+          Konumu Gör
           <img
             src={LocationArrowIcon}
             alt="location-arrow"

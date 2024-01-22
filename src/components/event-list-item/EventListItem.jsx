@@ -88,7 +88,7 @@ function EventListItem({ event }) {
       </div>
 
       <div className="event-list-item__body">
-      <p className="event-list-item__title">{event.title}</p>"
+      <p className="event-list-item__title">{event.title}</p>
 
         <div className="event-list-item__stars">
           <RatingStars size="medium" rating={event.averageRating} />
@@ -107,7 +107,7 @@ function EventListItem({ event }) {
             onClick={handleRedirectToGoogleMapsUrl}
             className="event-list-item__button"
           >
-            Konuma Git
+            Konumu Gör
             <img
               src={LocationArrowIcon}
               alt="location-arrow"
