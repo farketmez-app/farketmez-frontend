@@ -17,6 +17,7 @@ import DiscoverIcon from "../../assets/icons/discover.svg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+/**
 const fakeFetchedData = {
   title: "Regülatorde Tavuk Mangal",
   rating: 3.3,
@@ -31,6 +32,7 @@ const fakeFetchedData = {
     "https://lh5.googleusercontent.com/p/AF1QipNEtvfm4_x_Zfp77yrxmEa7k3IUKytNuBlNnaCf=w203-h152-k-no",
   ],
 };
+ */
 
 function ScheduleEventPage() {
   const navigate = useNavigate();
@@ -49,9 +51,6 @@ function ScheduleEventPage() {
     pool: [],
   });
   const timeSelectionRef = useRef();
-  const [fetchedEvent, setFetchedEvent] = useState({});
-
-  // http://localhost:8080/events/suggestedevent-withparams?place=home&cost=cheap&date=15.01.2024&time=&pool=my-events&id=2
 
   // check if user has attended any event before
   useEffect(() => {
@@ -93,6 +92,8 @@ function ScheduleEventPage() {
   }, []);
 
   useEffect(() => {
+    if (view === "algorithm") return;
+
     if ((time.start && time.end && value) || time.allDay) {
       setEvent({
         ...event,
@@ -113,74 +114,178 @@ function ScheduleEventPage() {
 
       calendar.setAttribute("style", `border: 1px solid #ccc;`);
     }
-  }, [time, value]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [time, value, view]);
 
   function handleFetchEvent() {
-    const url =
-      view === "farketmez"
-        ? `http://localhost:8080/events/suggestedevent-withparams?place=outdoor&cost=expensive&date=24.01.2024&time=09-18&pool=public-events&id=2`
-        : `http://localhost:8080/events/suggestedevent/${state.user.id}`;
     try {
-      /**
-      const [rawDate, timeRange] = event.date.split(" ");
-      const [day, month, year] = rawDate
-        .split("/")
-        .map((part) => parseInt(part));
+      if (view === "farketmez") {
+        const placeParam = event.where[0].code;
+        const costParam = event.cost[0].code;
+        const poolParam = event.pool[0].code;
 
-      const [startTime, endTime] = timeRange.split(" - ");
+        if (time.start) {
+          const [rawDate, timeRange] = event.date.split(" ");
+          const [day, month, year] = rawDate
+            .split("/")
+            .map((part) => parseInt(part));
 
-      // Ay değerini 1 artırarak tarih değerini oluşturalım
-      const dateWithDots = `${day.toString().padStart(2, "0")}.${(month + 1)
-        .toString()
-        .padStart(2, "0")}.${year}`;
-      const timeParam =
-        startTime.substring(0, 2) + "-" + time.end.substring(0, 2);
-      let placeParam =event.where[0].code;
+          const [startTime, endTime] = timeRange.split(" - ");
+          const dateWithDots = `${day.toString().padStart(2, "0")}.${(month + 1)
+            .toString()
+            .padStart(2, "0")}.${year}`;
+          const timeParam =
+            startTime.substring(0, 2) + "-" + time.end.substring(0, 2);
 
-      let costParam = event.cost[0].code;
+          fetch(
+            `http://localhost:8080/events/suggestedevent-withparams?place=${placeParam}&cost=${costParam}&date=${dateWithDots}&time=${timeParam}&pool=${poolParam}&id=${state.user.id}`
+          )
+            .then((res) => {
+              if (res.status === 204) {
+                toast("Aradığın Kriterlere Uygun Etkinlik Bulamadık", {
+                  type: "info",
+                  position: "top-center",
+                });
 
-      let poolParam = event.pool[0].code;
+                return null;
+              }
 
-      console.log(`http://localhost:8080/events/suggestedevent-withparams?
-      place=${placeParam}
-      &cost=${costParam}
-      &date=${dateWithDots}
-      &time=${timeParam}
-      &pool=${poolParam}
-      &id=${state.user.id}`); */
+              return res.json();
+            })
+            .then((event) => {
+              if (!event) return;
+              dispatch({
+                type: "SET_MODAL_CONTENT",
+                payload: (
+                  <EventModalContent
+                    event={{
+                      ...event,
+                      images: [
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                      ],
+                    }}
+                  />
+                ),
+              });
+              dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+              dispatch({
+                type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+                payload: true,
+              });
+              dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+              dispatch({
+                type: "SET_MODAL_HAS_SPESIFIED_HEIGHT",
+                payload: false,
+              });
+            })
+            .catch((err) => {
+              toast("Bir Hatayla Karşılaştık", {
+                type: "info",
+                position: "top-center",
+              });
+            });
 
-      fetch(url)
-        .then((res) => res.json())
-        .then((event) => {
-          dispatch({
-            type: "SET_MODAL_CONTENT",
-            payload: (
-              <EventModalContent
-                event={{
-                  ...event,
-                  images: [
-                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
-                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
-                    "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
-                  ],
-                }}
-              />
-            ),
+          return;
+        } else {
+          const today = new Date();
+
+          const day = today.getDate().toString().padStart(2, "0");
+          const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Aylar 0'dan başlar, bu yüzden +1 ekliyoruz.
+          const year = today.getFullYear();
+
+          const todayDateFormatted = `${day}.${month}.${year}`;
+
+          fetch(
+            `http://localhost:8080/events/suggestedevent-withparams?place=${placeParam}&cost=${costParam}&date=${todayDateFormatted}&time=&pool=${poolParam}&id=${state.user.id}`
+          )
+            .then((res) => {
+              if (res.status === 204) {
+                toast("Aradığın Kriterlere Uygun Etkinlik Bulamadık", {
+                  type: "info",
+                  position: "top-center",
+                });
+
+                return null;
+              }
+
+              return res.json();
+            })
+            .then((event) => {
+              if (!event) return;
+
+              dispatch({
+                type: "SET_MODAL_CONTENT",
+                payload: (
+                  <EventModalContent
+                    event={{
+                      ...event,
+                      images: [
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                        "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                      ],
+                    }}
+                  />
+                ),
+              });
+              dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+              dispatch({
+                type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+                payload: true,
+              });
+              dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+              dispatch({
+                type: "SET_MODAL_HAS_SPESIFIED_HEIGHT",
+                payload: false,
+              });
+            })
+            .catch((err) => {
+              toast("Bir Hatayla Karşılaştık", {
+                type: "error",
+                position: "top-center",
+              });
+            });
+        }
+        return;
+      } else {
+        fetch(`http://localhost:8080/events/suggestedevent/${state.user.id}`)
+          .then((res) => res.json())
+          .then((event) => {
+            dispatch({
+              type: "SET_MODAL_CONTENT",
+              payload: (
+                <EventModalContent
+                  event={{
+                    ...event,
+                    images: [
+                      "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                      "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                      "https://media-cdn.tripadvisor.com/media/photo-s/10/c4/23/16/highland-view-bed-and.jpg",
+                    ],
+                  }}
+                />
+              ),
+            });
+            dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+            dispatch({
+              type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+              payload: true,
+            });
+            dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+            dispatch({
+              type: "SET_MODAL_HAS_SPESIFIED_HEIGHT",
+              payload: false,
+            });
+          })
+          .catch((err) => {
+            toast("Bir Hatayla Karşılaştık 🤔", {
+              position: "top-center",
+              type: "error",
+            });
           });
-          dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-          dispatch({
-            type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
-            payload: true,
-          });
-          dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
-          dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
-        })
-        .catch((err) => {
-          toast("Bir Hatayla Karşılaştık 🤔", {
-            position: "top-center",
-            type: "error",
-          });
-        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -209,8 +314,6 @@ const fetchDataPromise = new Promise((resolve, reject) => {
      */
   }
 
-  console.log(event.where);
-
   return (
     <div className="schedule-event-page">
       <div className="schedule-event-page__view-switcher">
@@ -226,7 +329,18 @@ const fetchDataPromise = new Promise((resolve, reject) => {
         </button>
 
         <button
-          onClick={() => setView("algorithm")}
+          onClick={() => {
+            setView("algorithm");
+            setTime({ start: undefined, end: undefined });
+            setCalendarOpened(false);
+            setTimeSelectorOpened(false);
+            setEvent({
+              where: [],
+              cost: [],
+              date: "Bugün",
+              pool: [],
+            });
+          }}
           className={`schedule-event-page__view-switch-button ${
             view === "algorithm"
               ? "schedule-event-page__view-switch-button--active"
