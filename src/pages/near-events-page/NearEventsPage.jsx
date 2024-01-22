@@ -73,9 +73,7 @@ function NearEventsPage() {
 
           locationEventPairs.push(eventPerLocation);
         });
-
-        console.log(locationEventPairs);
-
+        
         setSelectedMarker(locationEventPairs[0].events[0]);
 
         setLocationEventPairs(locationEventPairs);

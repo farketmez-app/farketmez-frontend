@@ -8,21 +8,25 @@ const where = [
     name: "Dışarda",
     selected: false,
     image: DisardaImage,
+    code: "outdoor",
   },
   {
     name: "Mekanda",
     selected: false,
     image: MekandaImage,
+    code: "indoor",
   },
   {
     name: "Evde",
     selected: false,
     image: EvdeImage,
+    code: "home",
   },
   {
     name: "Farketmez",
     selected: false,
     image: FarketmezImage,
+    code: "all",
   },
 ];
 
@@ -30,18 +34,22 @@ const cost = [
   {
     name: "Ucuz",
     selected: false,
+    code: "cheap",
   },
   {
     name: "Orta",
     selected: false,
+    code: "mid",
   },
   {
     name: "Pahalı",
     selected: false,
+    code: "expensive",
   },
   {
     name: "Farketmez",
     selected: false,
+    code: "all",
   },
 ];
 
@@ -49,10 +57,12 @@ const pools = [
   {
     name: "Herkese Açık Etkinlikler",
     selected: false,
+    code: "public-events",
   },
   {
     name: "Kendi Etkinliklerim",
     selected: false,
+    code: "my-events",
   },
 ];
 

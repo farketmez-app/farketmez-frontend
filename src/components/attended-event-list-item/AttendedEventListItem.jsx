@@ -14,7 +14,9 @@ function AttendedEventListItem({ event, attendedListItemType }) {
   const { state } = useContext(AppContext);
   const [stars, setStars] = useState(0);
 
-  function handleRedirectToGoogleMapsUrl() {}
+  function handleRedirectToGoogleMapsUrl() {
+    console.log(event)
+  }
 
   function renderActionAreaElement() {
     switch (attendedListItemType) {
@@ -118,7 +120,7 @@ function AttendedEventListItem({ event, attendedListItemType }) {
               onClick={handleRedirectToGoogleMapsUrl}
               className="event-list-item__button"
             >
-              Konuma Git
+              Konumu Gör
               <img
                 src={LocationArrowIcon}
                 alt="location-arrow"

@@ -198,7 +198,7 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
           className="sign-in-form-back-button"
           onClick={() => setShowEmailSignIn(false)}
         >
-          <i class="bi bi-arrow-left-short"></i>
+          <i className="bi bi-arrow-left-short"></i>
           <p className="sign-in-form-back-button-text">Geri dön</p>
         </button>
       </div>

@@ -145,7 +145,7 @@ const EmailSignUp = ({ setShowEmailSignUp, handleSignInLinkClick }) => {
           className="sign-in-form-back-button"
           onClick={() => setShowEmailSignUp(false)}
         >
-          <i class="bi bi-arrow-left-short"></i>
+          <i className="bi bi-arrow-left-short"></i>
           <p className="sign-in-form-back-button-text">Geri dön</p>
         </button>
       </div>
