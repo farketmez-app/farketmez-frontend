@@ -154,6 +154,8 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
                 type: "SET_USER_HAS_SELECTED_INTERESTS",
                 payload: true,
               });
+
+              localStorage.setItem("selected-interests", true);
             } else {
               dispatch({
                 type: "SET_USER_HAS_SELECTED_INTERESTS",
@@ -164,9 +166,14 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
                 type: "LOGIN",
                 payload: { email: credentials.email, id: id },
               });
+
+              localStorage.setItem("selected-interests", false);
             }
           })
           .then(() => {
+            localStorage.setItem("id", id);
+            localStorage.setItem("email", credentials.email);
+            
             modalDispatch({ type: "RESET_MODAL" });
 
             navigate("/schedule-event");

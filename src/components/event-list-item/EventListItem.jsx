@@ -64,7 +64,11 @@ function EventListItem({ event }) {
 
   return (
     <div className="event-list-item">
-      {event.isPrivate && <CopyLinkButton link={event.privateLink} />}
+      {event.isPrivate && (
+        <CopyLinkButton
+          link={`http://localhost:3000/join/${event.accessKey}`}
+        />
+      )}
       <div
         className={`event-list-item__image-container 
       ${event.isPrivate ? "event-list-item__image-container--private" : ""}
@@ -105,6 +109,7 @@ function EventListItem({ event }) {
               {eventsThatUserJoins.includes(event.id)
                 ? "Katılıyorsun"
                 : "Katıl"}
+
             </button>
           )}
 
