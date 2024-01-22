@@ -6,9 +6,10 @@ import LocationArrowIcon from "../../assets/icons/location-arrow.svg";
 import LockIcon from "../../assets/icons/lock.png";
 import CopyLinkButton from "./components/copy-link-button/CopyLinkButton";
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function EventListItem({ event }) {
+  const location = useLocation();
   const { state } = useContext(AppContext);
   const [eventsThatUserJoins, setEventsThatUserJoins] = useState([]);
   const [fetching, setFetching] = useState(true);
@@ -63,7 +64,11 @@ function EventListItem({ event }) {
 
   return (
     <div className="event-list-item">
-      {event.isPrivate && <CopyLinkButton link={event.privateLink} />}
+      {event.isPrivate && (
+        <CopyLinkButton
+          link={`http://localhost:3000/join/${event.accessKey}`}
+        />
+      )}
       <div
         className={`event-list-item__image-container 
       ${event.isPrivate ? "event-list-item__image-container--private" : ""}
@@ -95,13 +100,15 @@ function EventListItem({ event }) {
         </div>
 
         <div className="event-list-item-buttons-container">
-          <button
-            disabled={eventsThatUserJoins.includes(event.id)}
-            onClick={handleAttendToEvent}
-            className="event-list-item__attend-button"
-          >
-            Katıl
-          </button>
+          {location.pathname === "/my-events" ? null : (
+            <button
+              disabled={eventsThatUserJoins.includes(event.id)}
+              onClick={handleAttendToEvent}
+              className="event-list-item__attend-button"
+            >
+              Katıl
+            </button>
+          )}
 
           <button
             onClick={handleRedirectToGoogleMapsUrl}
