@@ -33,13 +33,16 @@ function NearEventsPage() {
   useEffect(() => {
     if (!currentLocation) return;
 
+    console.log(currentLocation.lat, currentLocation.lng)
+
     fetch(
-      `http://localhost:8080/events/near-events?lat=${currentLocation.lng}&long=${currentLocation.lat}`,
+      `http://localhost:8080/events/near-events?lat=${currentLocation.lat}&long=${currentLocation.lng}`,
       {
         method: "GET",
       }
     )
       .then((res) => {
+        console.log(res.status)
         if (res.status === 204) {
           return [];
         } else {
@@ -269,8 +272,8 @@ function NearEventsPage() {
                 cursor="pointer"
                 title={item.events[0].title}
                 position={{
-                  lat: parseFloat(item.lng),
-                  lng: parseFloat(item.lat),
+                  lat: parseFloat(item.lat),
+                  lng: parseFloat(item.lng),
                 }}
                 icon={MarkerIcon}
               />

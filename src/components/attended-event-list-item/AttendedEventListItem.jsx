@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./attended-event-list-item.css";
 import RatingStars from "../../pages/near-events-page/components/rating-stars/RatingStars";
 import LocationArrowIcon from "../../assets/icons/location-arrow.svg";
@@ -14,8 +14,31 @@ function AttendedEventListItem({ event, attendedListItemType }) {
   const { state } = useContext(AppContext);
   const [stars, setStars] = useState(0);
 
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    if (!event) return;
+
+    const dateObject = new Date(event.date);
+
+    dateObject.setHours(dateObject.getHours() - 3);
+
+    const optionsDate = { day: "numeric", month: "long", year: "numeric" };
+    const formattedDate = new Intl.DateTimeFormat("tr-TR", optionsDate).format(
+      dateObject
+    );
+    const optionsTime = { hour: "2-digit", minute: "2-digit" };
+    const formattedTime = new Intl.DateTimeFormat("tr-TR", optionsTime).format(
+      dateObject
+    );
+
+    setDate(formattedDate);
+    setTime(formattedTime);
+  }, [event, event.createdDate]);
+
   function handleRedirectToGoogleMapsUrl() {
-    console.log(event)
+    console.log(event);
   }
 
   function renderActionAreaElement() {
@@ -25,9 +48,7 @@ function AttendedEventListItem({ event, attendedListItemType }) {
           <div className="action-area-element">
             <p className="action-area-element-title">Etkinlik Tarihi</p>
 
-            <p className="action-area-element-date">
-              {formatDateTime(event.date)}
-            </p>
+            <p className="action-area-element-date">{date + " " + time}</p>
           </div>
         );
 
@@ -47,12 +68,12 @@ function AttendedEventListItem({ event, attendedListItemType }) {
               eventId: event.id,
               rate: stars,
             }),
-          }).then(()=>{
-            toast("Etkinlik Puanlandı 🌟",{
-              type:'success',
-              position:'top-center'
-            })
-          })
+          }).then(() => {
+            toast("Etkinlik Puanlandı 🌟", {
+              type: "success",
+              position: "top-center",
+            });
+          });
         }
 
         return (
@@ -77,7 +98,7 @@ function AttendedEventListItem({ event, attendedListItemType }) {
               </div>
 
               <button
-              disabled={stars===0}
+                disabled={stars === 0}
                 onClick={rateEvent}
                 className="action-area-element_rating-rate-button"
               >
@@ -109,7 +130,15 @@ function AttendedEventListItem({ event, attendedListItemType }) {
         </div>
 
         <div className="event-list-item__body">
-          <p className="event-list-item__title">{event.title}</p>
+          <div className="event-list-item__heading">
+            <p className="event-list-item__title">{event.title}</p>
+
+            <div className="event-list-item__heading__date-container">
+              <p className="event-list-item__heading__date">{date}</p>
+
+              <p className="event-list-item__heading__date">{time}</p>
+            </div>
+          </div>
 
           <div className="event-list-item__stars">
             <RatingStars size="medium" rating={event.averageRating} />

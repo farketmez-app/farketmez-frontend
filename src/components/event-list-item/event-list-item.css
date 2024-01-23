@@ -46,6 +46,25 @@
   flex: 3;
 }
 
+.event-list-item__heading {
+  display: flex;
+  gap: 20px;
+}
+
+.event-list-item__heading__date-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.event-list-item__heading__date {
+  font-size: 14px;
+}
+
+.event-list-item__heading__date {
+  font-size: 12px;
+}
+
 .event-list-item__title {
   font-size: 20px;
   font-weight: 600;
@@ -86,7 +105,7 @@
   background: #ff6208;
 }
 
-.event-list-item__attend-button:disabled{
+.event-list-item__attend-button:disabled {
   background: #b9b9b9;
   cursor: not-allowed;
 }

@@ -31,6 +31,8 @@ function CreateEvent() {
   });
   const [selectedLocation, setSelectedLocation] = useState(null);
 
+  console.log(newEvent)
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
@@ -76,7 +78,6 @@ function CreateEvent() {
       eventToRequest = {
         ...eventToRequest,
         location: {
-          id: 1,
           latitude: -1,
           longitude: -1,
           googleMapsUrl: newEvent.location,
@@ -86,7 +87,6 @@ function CreateEvent() {
       eventToRequest = {
         ...eventToRequest,
         location: {
-          id: 1,
           latitude: newEvent.location.lat,
           longitude: newEvent.location.lng,
           googleMapsUrl: null,
