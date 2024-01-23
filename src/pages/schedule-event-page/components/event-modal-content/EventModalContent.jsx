@@ -9,6 +9,8 @@ import LocationArrowIcon from "../../../../assets/icons/location-arrow.svg";
 import TickIcon from "../../../../assets/icons/tick.svg";
 import { AppContext } from "../../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { ModalContext } from "../../../../context/ModalContext";
+import EventLocationModalContent from "../../../../components/event-location-modal-content/EventLocationModalContent";
 
 function renderStars(rating) {
   const stars = [];
@@ -33,6 +35,7 @@ function renderStars(rating) {
 }
 
 function EventModalContent({ event }) {
+  const { dispatch } = useContext(ModalContext);
   const { state } = useContext(AppContext);
   const navigate = useNavigate();
   const whereFormatted = event.where === "disarida" ? "Dışarıda" : "İçeride";
@@ -58,7 +61,42 @@ function EventModalContent({ event }) {
   }
 
   function handleRedirectToGoogleMapsUrl() {
-    console.log("redirecting to google maps url");
+    const googleMapsUrl = event.location.googleMapsUrl;
+    let lat, lng;
+
+    if (googleMapsUrl) {
+      const match = googleMapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+      if (match) {
+        lat = parseFloat(match[1]);
+        lng = parseFloat(match[2]);
+      } else {
+        console.error("Latitude ve longitude bilgileri bulunamadı.");
+      }
+    } else {
+      lat = event.location.latitude;
+      lng = event.location.longitude;
+    }
+
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "" });
+    dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
+
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <EventLocationModalContent
+          lat={lat}
+          lng={lng}
+          googleMapsUrl={googleMapsUrl}
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
   }
 
   return (

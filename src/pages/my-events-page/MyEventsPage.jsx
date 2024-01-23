@@ -35,8 +35,6 @@ function MyEventsPage() {
       }
   }, [state.user.id, state.eventCreated]);
 
-  console.log(myEvents)
-
   return (
     <div className="my-events-page">
       <EventList

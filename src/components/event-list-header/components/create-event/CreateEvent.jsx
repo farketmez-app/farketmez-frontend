@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { ModalContext } from "../../../../context/ModalContext";
 
 function CreateEvent() {
-  const { state, dispatch:appDispatch } = useContext(AppContext);
+  const { state, dispatch: appDispatch } = useContext(AppContext);
   const { dispatch } = useContext(ModalContext);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -30,8 +30,6 @@ function CreateEvent() {
     lng: 30.5163944,
   });
   const [selectedLocation, setSelectedLocation] = useState(null);
-
-  console.log(newEvent)
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -102,7 +100,6 @@ function CreateEvent() {
       body: JSON.stringify(eventToRequest),
     })
       .then((res) => {
-        console.log(res.status);
         if (res.status === 403) {
           return null;
         }
@@ -127,7 +124,7 @@ function CreateEvent() {
           });
         }
 
-        appDispatch({type:'SET_EVENT_CREATED', payload:true})
+        appDispatch({ type: "SET_EVENT_CREATED", payload: true });
 
         dispatch({ type: "RESET_MODAL" });
       })

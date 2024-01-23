@@ -60,3 +60,22 @@
   background-color: #9e62ab;
   border-color: #b092ff;
 }
+
+@media only screen and (max-width: 500px) {
+  .header{
+    padding: 20px;
+  }
+
+  .header_logo{
+    font-size: 14px;
+  }
+
+  .header_favicon{
+    width: 30px;
+    height: 30px;
+  }
+
+  .header-button{
+    font-size: 14px;
+  }
+}

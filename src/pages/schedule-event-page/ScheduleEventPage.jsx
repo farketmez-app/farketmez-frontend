@@ -445,7 +445,7 @@ const fetchDataPromise = new Promise((resolve, reject) => {
               Ne Zaman Katılacaksın?
             </p>
 
-            <div className="schedule-event-page__section__content">
+            <div className="schedule-event-page__section__content schedule-event-page__section__content-date">
               <div className="schedule-event-page__section-inner-content-date">
                 <button
                   className={`schedule-event-page__section-item--date-today-button  ${
@@ -576,7 +576,7 @@ const fetchDataPromise = new Promise((resolve, reject) => {
               Etkinlik Havuzunu Seç
             </p>
 
-            <div className="schedule-event-page__section__content">
+            <div className="schedule-event-page__section__content schedule-event-page__section__content__pool">
               {pools.map((item) => {
                 return (
                   <div

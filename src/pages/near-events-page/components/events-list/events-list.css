@@ -1,8 +1,6 @@
-.events-list{
-
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
 }
