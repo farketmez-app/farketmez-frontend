@@ -1,7 +1,5 @@
 import React, { createContext, useReducer } from "react";
 
-console.log(localStorage.getItem("selected-interests"));
-
 const initialState = {
   user: {
     email: localStorage.getItem("email") || null,

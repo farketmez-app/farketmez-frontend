@@ -17,6 +17,12 @@ function MainLayoutWithPadding({
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!state.user.id) {
+      navigate("/");
+    }
+  }, [navigate, state.user.id]);
+
+  useEffect(() => {
     if (state.user.id && !state.user.userHasSelectedInterests) {
       dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
       dispatch({ type: "SET_MODAL_TITLE", payload: "İlgi Alanlarını Seç" });
