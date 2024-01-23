@@ -14,6 +14,30 @@ function EventListItem({ event }) {
   const [eventsThatUserJoins, setEventsThatUserJoins] = useState([]);
   const [fetching, setFetching] = useState(true);
   const navigate = useNavigate();
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    if (!event) return;
+
+    console.log(event.date);
+
+    const dateObject = new Date(event.date);
+
+    dateObject.setHours(dateObject.getHours() - 3);
+
+    const optionsDate = { day: "numeric", month: "long", year: "numeric" };
+    const formattedDate = new Intl.DateTimeFormat("tr-TR", optionsDate).format(
+      dateObject
+    );
+    const optionsTime = { hour: "2-digit", minute: "2-digit" };
+    const formattedTime = new Intl.DateTimeFormat("tr-TR", optionsTime).format(
+      dateObject
+    );
+
+    setDate(formattedDate);
+    setTime(formattedTime);
+  }, [event, event.createdDate]);
 
   useEffect(() => {
     fetch(`http://localhost:8080/participants/by-user-id/${state.user.id}`)
@@ -93,7 +117,15 @@ function EventListItem({ event }) {
       </div>
 
       <div className="event-list-item__body">
-      <p className="event-list-item__title">{event.title}</p>
+        <div className="event-list-item__heading">
+          <p className="event-list-item__title">{event.title}</p>
+
+          <div className="event-list-item__heading__date-container">
+            <p className="event-list-item__heading__date">{date}</p>
+
+            <p className="event-list-item__heading__date">{time}</p>
+          </div>
+        </div>
 
         <div className="event-list-item__stars">
           <RatingStars size="medium" rating={event.averageRating} />
@@ -109,7 +141,6 @@ function EventListItem({ event }) {
               {eventsThatUserJoins.includes(event.id)
                 ? "Katılıyorsun"
                 : "Katıl"}
-
             </button>
           )}
 
