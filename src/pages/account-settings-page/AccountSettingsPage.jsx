@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./account-settings-page.css";
+import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function AccountSettingsPage() {
+  const navigate = useNavigate();
+  const { state, dispatch } = useContext(AppContext);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [emailConfirmed, setEmailConfirmed] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/users/${state.user.id}`)
+      .then((res) => res.json())
+      .then((user) => setUser(user));
+  }, [state.user.id]);
 
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,11 +27,91 @@ function AccountSettingsPage() {
     return emailRegex.test(email);
   }
 
+  function handleSaveSettings(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let updatedUser = {};
+
+    if (name.length > 0) {
+      updatedUser.name = name;
+    }
+
+    if (surname.length > 0) {
+      updatedUser.lastname = surname;
+    }
+
+    if (password.length > 0) {
+      updatedUser.password = password;
+    }
+
+    if (password.length > 0 && passwordConfirmation !== password) {
+      toast("Şifreyi Doğruladığından Emin Ol ✌🏼", {
+        type: "info",
+        position: "top-center",
+      });
+      return;
+    }
+
+    fetch(`http://localhost:8080/users/${state.user.id}`)
+      .then((res) => res.json())
+      .then((user) => {
+        if (email.length > 0) {
+          updatedUser.mail = email;
+        } else {
+          updatedUser.mail = user.mail;
+        }
+
+        fetch(`http://localhost:8080/users`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: state.user.id,
+            username: user.username,
+            ...updatedUser,
+          }),
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json();
+            }
+
+            return null;
+          })
+          .then((newUser) => {
+            if (!newUser) {
+              toast("Bilgiler Kaydedilirken Bir Hatayla Karşılaştık", {
+                type: "warning",
+                position: "top-center",
+              });
+
+              return;
+            }
+
+            toast("Hesap Bilgileri Başarıyla Güncellendi 💜", {
+              type: "success",
+              position: "top-center",
+            });
+
+            setTimeout(() => {
+              localStorage.clear();
+              dispatch({ type: "LOGOUT" });
+
+              navigate("/");
+            }, 1000);
+          });
+      });
+  }
+
+  if (!user) return null;
+
   return (
     <div className="account-settins-page">
       <p className="account-settins-page-title">Hesap Ayarları</p>
 
-      <form className="account-settins-page-form">
+      <div className="account-settins-page-form">
         <div className="account-settings-page-form-groups-container">
           <div className="account-settins-page-form-input-group">
             <label className="account-settins-page-form-input-group-label">
@@ -29,7 +121,7 @@ function AccountSettingsPage() {
             <input
               onChange={(e) => setName(e.target.value)}
               className="account-settins-page-form-input-group-input"
-              placeholder="ismini gir"
+              placeholder={user.name}
             />
           </div>
 
@@ -41,7 +133,7 @@ function AccountSettingsPage() {
             <input
               onChange={(e) => setSurname(e.target.value)}
               className="account-settins-page-form-input-group-input"
-              placeholder="soyismini gir"
+              placeholder={user.lastname}
             />
           </div>
         </div>
@@ -55,19 +147,19 @@ function AccountSettingsPage() {
             <input
               onChange={(e) => setEmail(e.target.value)}
               className="account-settins-page-form-input-group-input"
-              placeholder="e-posta adresini gir"
+              placeholder={user.mail}
             />
           </div>
 
-          <div className="account-settins-page-form-input-group">
+          <div className="account-settins-page-form-input-group--confirm-btn-container">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // handle this with real logic
+
                 setEmailConfirmed(true);
               }}
-              disabled={email.length === 0 && !isValidEmail(email)}
+              disabled={!isValidEmail(email)}
               className="account-settins-page-form-input-group-confirm-btn"
             >
               Doğrula
@@ -102,6 +194,7 @@ function AccountSettingsPage() {
         </div>
 
         <button
+          onClick={handleSaveSettings}
           disabled={
             name.length === 0 &&
             surname.length === 0 &&
@@ -112,7 +205,7 @@ function AccountSettingsPage() {
         >
           Değişiklikleri Onayla
         </button>
-      </form>
+      </div>
     </div>
   );
 }
