@@ -6,3 +6,16 @@
 .emptyListMessage{
     padding: 16px 20px;
 }
+
+@media only screen and (max-width: 500px) {
+    .event-list{
+        padding: 0;
+    }    
+
+    .event-list__body{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+}

@@ -7,8 +7,11 @@ import LockIcon from "../../assets/icons/lock.png";
 import CopyLinkButton from "./components/copy-link-button/CopyLinkButton";
 import { AppContext } from "../../context/AppContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ModalContext } from "../../context/ModalContext";
+import EventLocationModalContent from "../event-location-modal-content/EventLocationModalContent";
 
 function EventListItem({ event }) {
+  const { dispatch } = useContext(ModalContext);
   const location = useLocation();
   const { state } = useContext(AppContext);
   const [eventsThatUserJoins, setEventsThatUserJoins] = useState([]);
@@ -19,9 +22,6 @@ function EventListItem({ event }) {
 
   useEffect(() => {
     if (!event) return;
-
-    console.log(event.date);
-
     const dateObject = new Date(event.date);
 
     dateObject.setHours(dateObject.getHours() - 3);
@@ -79,7 +79,42 @@ function EventListItem({ event }) {
   }
 
   function handleRedirectToGoogleMapsUrl() {
-    console.log("redirecting to google maps url");
+    const googleMapsUrl = event.location.googleMapsUrl;
+    let lat, lng;
+
+    if (googleMapsUrl) {
+      const match = googleMapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+      if (match) {
+        lat = parseFloat(match[1]);
+        lng = parseFloat(match[2]);
+      } else {
+        console.error("Latitude ve longitude bilgileri bulunamadı.");
+      }
+    } else {
+      lat = event.location.latitude;
+      lng = event.location.longitude;
+    }
+
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "" });
+    dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
+
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <EventLocationModalContent
+          lat={lat}
+          lng={lng}
+          googleMapsUrl={googleMapsUrl}
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
   }
 
   if (fetching) {

@@ -33,8 +33,6 @@ function NearEventsPage() {
   useEffect(() => {
     if (!currentLocation) return;
 
-    console.log(currentLocation.lat, currentLocation.lng)
-
     fetch(
       `http://localhost:8080/events/near-events?lat=${currentLocation.lat}&long=${currentLocation.lng}`,
       {
@@ -42,7 +40,6 @@ function NearEventsPage() {
       }
     )
       .then((res) => {
-        console.log(res.status)
         if (res.status === 204) {
           return [];
         } else {
@@ -76,7 +73,7 @@ function NearEventsPage() {
 
           locationEventPairs.push(eventPerLocation);
         });
-        
+
         setSelectedMarker(locationEventPairs[0].events[0]);
 
         setLocationEventPairs(locationEventPairs);
@@ -92,6 +89,14 @@ function NearEventsPage() {
       setCurrentLocation({ lat: latitude, lng: longitude });
     });
   }, []);
+
+  useEffect(() => {
+    if (!shouldShowEventPopup && mapContainerRef.current) {
+      if (mapContainerRef.current.contains(document.getElementById("canvas"))) {
+        mapContainerRef.current.removeChild(document.getElementById("canvas"));
+      }
+    }
+  }, [shouldShowEventPopup]);
 
   // add number to markers that has more than one event
   useEffect(() => {
@@ -284,6 +289,7 @@ function NearEventsPage() {
       {shouldShowEventPopup ? (
         <NearEventsProvider>
           <EventPopup
+            setShouldShowEventPopup={setShouldShowEventPopup}
             eventContainerRef={eventContainerRef}
             marker={selectedMarker}
           />

@@ -67,11 +67,15 @@ function App() {
       path: "/public-events",
       element: (
         <DropdownProvider>
-          <MainLayout>
-            <PublicEventsPage />
+          <ModalProvider>
+            <MainLayout>
+              <PublicEventsPage />
 
-            <AccountDropdown />
-          </MainLayout>
+              <FarketmezModal />
+
+              <AccountDropdown />
+            </MainLayout>
+          </ModalProvider>
         </DropdownProvider>
       ),
     },
@@ -91,11 +95,15 @@ function App() {
       path: "/attended-events",
       element: (
         <DropdownProvider>
-          <MainLayout shouldShowSwitcher={false}>
-            <AttendedEventsPage />
+          <ModalProvider>
+            <MainLayout shouldShowSwitcher={false}>
+              <AttendedEventsPage />
 
-            <AccountDropdown />
-          </MainLayout>
+              <FarketmezModal />
+
+              <AccountDropdown />
+            </MainLayout>
+          </ModalProvider>
         </DropdownProvider>
       ),
     },
@@ -110,7 +118,8 @@ function App() {
           </MainLayout>
         </DropdownProvider>
       ),
-    },{
+    },
+    {
       path: "/join/:accessKey",
       element: (
         <DropdownProvider>

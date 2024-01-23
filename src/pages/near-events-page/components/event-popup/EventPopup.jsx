@@ -4,7 +4,9 @@ import EventPreview from "../../components/event-preview/EventPreview";
 import EventsList from "../../components/events-list/EventsList";
 import { NearEventsContext } from "../../context/nearEventsContext";
 
-function EventPopup({ eventContainerRef, marker }) {
+import CloseIcon from "../../../../assets/icons/close.png";
+
+function EventPopup({ eventContainerRef, marker, setShouldShowEventPopup }) {
   const { state, dispatch } = useContext(NearEventsContext);
 
   const hasMoreThanOneEvent = marker.events.length > 1;
@@ -17,6 +19,18 @@ function EventPopup({ eventContainerRef, marker }) {
 
   return (
     <div ref={eventContainerRef} className="event-popup">
+      <button
+        className="event-popup__close-btn"
+        onClick={() => {
+          setShouldShowEventPopup(false);
+        }}
+      >
+        <img
+          src={CloseIcon}
+          alt="cross"
+          className="event-popup__close-btn-icon"
+        />
+      </button>
       {hasMoreThanOneEvent && !state.plainEventWantedToBeSeen && (
         <p className="event-popup__title">
           Seçilen konumda {marker.events.length} etkinlik bulundu.

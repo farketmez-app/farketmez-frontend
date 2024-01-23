@@ -8,9 +8,12 @@ import StarFilled from "../../assets/icons/star-filled-orange.svg";
 import StarUnfilled from "../../assets/icons/star-unfilled-orange.svg";
 import { AppContext } from "../../context/AppContext";
 import { toast } from "react-toastify";
+import EventLocationModalContent from "../event-location-modal-content/EventLocationModalContent";
+import { ModalContext } from "../../context/ModalContext";
 
 // attendedListItemType is "eventsNotRatedNotExpired" or "eventsNotRatedExpired" or "eventsRatedExpired"
 function AttendedEventListItem({ event, attendedListItemType }) {
+  const { dispatch } = useContext(ModalContext);
   const { state } = useContext(AppContext);
   const [stars, setStars] = useState(0);
 
@@ -38,7 +41,42 @@ function AttendedEventListItem({ event, attendedListItemType }) {
   }, [event, event.createdDate]);
 
   function handleRedirectToGoogleMapsUrl() {
-    console.log(event);
+    const googleMapsUrl = event.location.googleMapsUrl;
+    let lat, lng;
+
+    if (googleMapsUrl) {
+      const match = googleMapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+      if (match) {
+        lat = parseFloat(match[1]);
+        lng = parseFloat(match[2]);
+      } else {
+        console.error("Latitude ve longitude bilgileri bulunamadı.");
+      }
+    } else {
+      lat = event.location.latitude;
+      lng = event.location.longitude;
+    }
+
+    dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
+    dispatch({ type: "SET_MODAL_TITLE", payload: "" });
+    dispatch({ type: "SET_MODAL_HAS_SPESIFIED_HEIGHT", payload: false });
+
+    dispatch({
+      type: "SET_MODAL_CONTENT",
+      payload: (
+        <EventLocationModalContent
+          lat={lat}
+          lng={lng}
+          googleMapsUrl={googleMapsUrl}
+        />
+      ),
+    });
+    dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
   }
 
   function renderActionAreaElement() {
