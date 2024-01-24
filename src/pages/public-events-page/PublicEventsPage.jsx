@@ -12,12 +12,15 @@ function PublicEventsPage() {
 
   useEffect(() => {
     setFetching(true);
-    fetch("http://localhost:8080/events", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      "http://localhost:8080/events/filter?cost=all&place=all&priority=attendance",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         let filteredEvents = [];
@@ -32,6 +35,31 @@ function PublicEventsPage() {
         setFetching(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetch(
+      `http://localhost:8080/events/filter?cost=${state.filtering.cost}&place=${state.filtering.place}&priority=${state.filtering.priority}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        let filteredEvents = [];
+        data.forEach((event) => {
+          if (!event.isPrivate) {
+            filteredEvents.push(event);
+          }
+        });
+
+        setEvents(filteredEvents);
+        dispatch({ type: "SET_EVENTS", payload: filteredEvents });
+        setFetching(false);
+      });
+  }, [state.filtering]);
 
   useEffect(() => {
     if (!state.searching) {

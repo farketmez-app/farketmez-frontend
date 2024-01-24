@@ -21,8 +21,8 @@ function CreateEvent() {
     location: "",
     date: "",
     time: "",
-    cost: "Ucuz",
-    place: "Dışarda",
+    cost: "cheap",
+    place: "outdoor",
     public: true,
   });
   const [currentLocation, setCurrentLocation] = useState({
@@ -72,7 +72,7 @@ function CreateEvent() {
       location: null,
     };
 
-    if (newEvent.place === "Dışarda" || newEvent.place === "Mekanda") {
+    if (newEvent.place === "outdoor" || newEvent.place === "place") {
       eventToRequest = {
         ...eventToRequest,
         location: {
@@ -182,9 +182,9 @@ function CreateEvent() {
               className="create-event__form-input"
               placeholder="Maliyet"
             >
-              <option value="Ucuz">Ucuz</option>
-              <option value="Orta">Orta</option>
-              <option value="Pahalı">Pahalı</option>
+              <option value="cheap">Ucuz</option>
+              <option value="mid">Orta</option>
+              <option value="expensive">Pahalı</option>
             </select>
           </div>
 
@@ -196,16 +196,16 @@ function CreateEvent() {
               className="create-event__form-input"
               placeholder="Maliyet"
             >
-              <option value="Dışarda">Dışarda</option>
-              <option value="Evde">Evde</option>
-              <option value="Mekanda">Mekanda</option>
+              <option value="outdoor">Dışarda</option>
+              <option value="home">Evde</option>
+              <option value="place">Mekanda</option>
             </select>
           </div>
         </div>
 
         <div className="create-event__form-group">
           <label className="create-event__form-label">Nerede Olacak</label>
-          {(newEvent.place === "Dışarda" || newEvent.place === "Mekanda") && (
+          {(newEvent.place === "outdoor" || newEvent.place === "place") && (
             <input
               name="location"
               onChange={handleChange}
@@ -215,7 +215,7 @@ function CreateEvent() {
             />
           )}
 
-          {isLoaded && newEvent.place === "Evde" && (
+          {isLoaded && newEvent.place === "home" && (
             <div className="create-event__map-container create-event__form-input--location">
               <GoogleMap
                 onClick={(e) => {

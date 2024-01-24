@@ -124,7 +124,7 @@ function EventListItem({ event }) {
   }
 
   return (
-    <div className="event-list-item">
+    <div className={`event-list-item ${event.date < new Date().toISOString() ? "event-list-item--past" : ""}`}>
       {event.isPrivate && (
         <CopyLinkButton
           link={`http://localhost:3000/join/${event.accessKey}`}
@@ -169,7 +169,8 @@ function EventListItem({ event }) {
         </div>
 
         <div className="event-list-item-buttons-container">
-          {location.pathname === "/my-events" ? null : (
+          {location.pathname === "/my-events" ||
+          event.date < new Date().toISOString() ? null : (
             <button
               disabled={eventsThatUserJoins.includes(event.id)}
               onClick={handleAttendToEvent}

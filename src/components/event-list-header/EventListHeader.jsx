@@ -6,22 +6,22 @@ import CreateEvent from "./components/create-event/CreateEvent";
 import { useState } from "react";
 
 import FilterIcon from "../../assets/icons/filter.png";
+import EventsContext from "../../pages/public-events-page/context";
 
 // right element is either an "add event button" or a filter dropdown
 function EventListHeader({ title, rightElement }) {
+  const { state, dispatch: eventsDispatch } = useContext(EventsContext);
   const { dispatch } = useContext(ModalContext);
-  const [filter, setFilter] = useState({
-    maliyet: ["Ucuz"],
-    nerede: ["Mekanda"],
-    oncelik: ["En Çok Katılım", "En İyi Derece"],
-  });
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
 
   function openAddEventModal() {
     dispatch({ type: "SET_MODAL_TITLE", payload: "Etkinlik Oluştur" });
     dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: true });
     dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
-    dispatch({ type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK", payload: true });
+    dispatch({
+      type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+      payload: true,
+    });
 
     dispatch({
       type: "SET_MODAL_CONTENT",
@@ -46,20 +46,16 @@ function EventListHeader({ title, rightElement }) {
     }
 
     function handleFilter(filterType, filterValue) {
-      if (filter[filterType].includes(filterValue)) {
-        setFilter({
-          ...filter,
-          [filterType]: filter[filterType].filter(
-            (item) => item !== filterValue
-          ),
-        });
-      } else {
-        setFilter({
-          ...filter,
-          [filterType]: [...filter[filterType], filterValue],
-        });
-      }
+      eventsDispatch({
+        type: "SET_FILTERING",
+        payload: {
+          ...state.filtering,
+          [filterType]: filterValue,
+        },
+      });
     }
+
+    console.log(state.filtering);
 
     if (rightElement === "dropdown") {
       return (
@@ -85,9 +81,9 @@ function EventListHeader({ title, rightElement }) {
 
                 <div className="event-list-header__dropdown-content--header-buttons">
                   <button
-                    onClick={() => handleFilter("maliyet", "Ucuz")}
+                    onClick={() => handleFilter("cost", "cheap")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.maliyet.includes("Ucuz") &&
+                      state.filtering.cost.includes("cheap") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -95,9 +91,9 @@ function EventListHeader({ title, rightElement }) {
                   </button>
 
                   <button
-                    onClick={() => handleFilter("maliyet", "Orta")}
+                    onClick={() => handleFilter("cost", "mid")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.maliyet.includes("Orta") &&
+                      state.filtering.cost.includes("mid") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -105,13 +101,23 @@ function EventListHeader({ title, rightElement }) {
                   </button>
 
                   <button
-                    onClick={() => handleFilter("maliyet", "Pahalı")}
+                    onClick={() => handleFilter("cost", "expensive")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.maliyet.includes("Pahalı") &&
+                      state.filtering.cost.includes("expensive") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
                     Pahalı
+                  </button>
+
+                  <button
+                    onClick={() => handleFilter("cost", "all")}
+                    className={`event-list-header__dropdown-content--header-button ${
+                      state.filtering.cost.includes("all") &&
+                      "event-list-header__dropdown-content--header-button--active"
+                    }`}
+                  >
+                    Hepsi
                   </button>
                 </div>
 
@@ -121,9 +127,9 @@ function EventListHeader({ title, rightElement }) {
 
                 <div className="event-list-header__dropdown-content--header-buttons">
                   <button
-                    onClick={() => handleFilter("nerede", "Mekanda")}
+                    onClick={() => handleFilter("place", "place")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.nerede.includes("Mekanda") &&
+                      state.filtering.place.includes("place") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -131,9 +137,9 @@ function EventListHeader({ title, rightElement }) {
                   </button>
 
                   <button
-                    onClick={() => handleFilter("nerede", "Dışarda")}
+                    onClick={() => handleFilter("place", "outdoor")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.nerede.includes("Dışarda") &&
+                      state.filtering.place.includes("outdoor") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -141,13 +147,23 @@ function EventListHeader({ title, rightElement }) {
                   </button>
 
                   <button
-                    onClick={() => handleFilter("nerede", "Evde")}
+                    onClick={() => handleFilter("place", "home")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.nerede.includes("Evde") &&
+                      state.filtering.place.includes("home") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
                     Evde
+                  </button>
+
+                  <button
+                    onClick={() => handleFilter("place", "all")}
+                    className={`event-list-header__dropdown-content--header-button ${
+                      state.filtering.place.includes("all") &&
+                      "event-list-header__dropdown-content--header-button--active"
+                    }`}
+                  >
+                    Hepsi
                   </button>
                 </div>
 
@@ -157,9 +173,9 @@ function EventListHeader({ title, rightElement }) {
 
                 <div className="event-list-header__dropdown-content--header-buttons">
                   <button
-                    onClick={() => handleFilter("oncelik", "En Çok Katılım")}
+                    onClick={() => handleFilter("priority", "attendance")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.oncelik.includes("En Çok Katılım") &&
+                      state.filtering.priority.includes("attendance") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -167,9 +183,9 @@ function EventListHeader({ title, rightElement }) {
                   </button>
 
                   <button
-                    onClick={() => handleFilter("oncelik", "En İyi Derece")}
+                    onClick={() => handleFilter("priority", "rating")}
                     className={`event-list-header__dropdown-content--header-button ${
-                      filter.oncelik.includes("En İyi Derece") &&
+                      state.filtering.priority.includes("rating") &&
                       "event-list-header__dropdown-content--header-button--active"
                     }`}
                   >
@@ -183,8 +199,8 @@ function EventListHeader({ title, rightElement }) {
       );
     }
 
-    if(!rightElement){
-      return <div/>
+    if (!rightElement) {
+      return <div />;
     }
   }
 
