@@ -74,6 +74,8 @@ function ScheduleEventPage() {
             event.rating === null && new Date(event.event.date) < new Date()
           );
         });
+        
+        if(staleUnratedEvents.length === 0) return;
 
         if (location.state?.fromLogin) {
           dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });

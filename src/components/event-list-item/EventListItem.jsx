@@ -37,7 +37,7 @@ function EventListItem({ event }) {
 
     setDate(formattedDate);
     setTime(formattedTime);
-  }, [event, event.createdDate]);
+  }, [event]);
 
   useEffect(() => {
     if (eventsThatUserJoins.length > 0) return;
