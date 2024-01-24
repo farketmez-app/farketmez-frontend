@@ -5,6 +5,11 @@ const initialState = {
   fetching: false,
   searchInput: "",
   searching: false,
+  filtering: {
+    cost: "all",
+    place: "all",
+    priority: "attendance",
+  },
 };
 
 const reducer = (state, action) => {
@@ -30,7 +35,13 @@ const reducer = (state, action) => {
         ...state,
         searching: action.payload,
       };
-      
+
+    case "SET_FILTERING":
+      return {
+        ...state,
+        filtering: action.payload,
+      };
+
     default:
       return state;
   }

@@ -67,6 +67,8 @@ function ScheduleEventPage() {
         return res.json();
       })
       .then((events) => {
+        if(!events) return;
+        
         const staleUnratedEvents = events.filter((event) => {
           return (
             event.rating === null && new Date(event.event.date) < new Date()
