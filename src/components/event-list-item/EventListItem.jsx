@@ -40,6 +40,8 @@ function EventListItem({ event }) {
   }, [event, event.createdDate]);
 
   useEffect(() => {
+    if (eventsThatUserJoins.length > 0) return;
+
     fetch(`http://localhost:8080/participants/by-user-id/${state.user.id}`)
       .then((res) => {
         if (res.status !== 200) {

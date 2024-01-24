@@ -18,6 +18,7 @@ import { DropdownProvider } from "./context/DropdownContext";
 import AccountSettingsPage from "./pages/account-settings-page/AccountSettingsPage";
 import AccountDropdown from "./components/header/components/account-dropdown/AccountDropdown";
 import JoinEventPage from "./pages/join-event-page/JoinEventPage";
+import { EventsProvider } from "./pages/public-events-page/context";
 
 function App() {
   const router = createBrowserRouter([
@@ -66,17 +67,19 @@ function App() {
     {
       path: "/public-events",
       element: (
-        <DropdownProvider>
-          <ModalProvider>
-            <MainLayout>
-              <PublicEventsPage />
+        <EventsProvider>
+          <DropdownProvider>
+            <ModalProvider>
+              <MainLayout>
+                <PublicEventsPage />
 
-              <FarketmezModal />
+                <FarketmezModal />
 
-              <AccountDropdown />
-            </MainLayout>
-          </ModalProvider>
-        </DropdownProvider>
+                <AccountDropdown />
+              </MainLayout>
+            </ModalProvider>
+          </DropdownProvider>
+        </EventsProvider>
       ),
     },
     {
