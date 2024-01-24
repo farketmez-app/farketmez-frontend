@@ -37,8 +37,6 @@ function SearchBar() {
     }
   }, [searchTerm]);
 
-  console.log(state.searching)
-
   function handleChanges(e) {
     if (e.target.value === "") {
       dispatch({ type: "SET_SEARCHING", payload: false });

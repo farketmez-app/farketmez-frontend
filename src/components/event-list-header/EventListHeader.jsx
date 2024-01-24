@@ -55,8 +55,6 @@ function EventListHeader({ title, rightElement }) {
       });
     }
 
-    console.log(state.filtering);
-
     if (rightElement === "dropdown") {
       return (
         <div className="event-list-header__dropdown">
