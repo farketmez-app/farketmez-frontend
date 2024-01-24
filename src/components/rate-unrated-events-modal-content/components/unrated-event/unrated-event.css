@@ -1,0 +1,15 @@
+.unrated-event_rating-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.unrated-event_rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.unrated-event_rating-star {
+  background-color: transparent;
+}

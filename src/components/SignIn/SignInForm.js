@@ -173,10 +173,12 @@ const EmailSignIn = ({ setShowEmailSignIn, onForgotPasswordClick }) => {
           .then(() => {
             localStorage.setItem("id", id);
             localStorage.setItem("email", credentials.email);
-            
+
             modalDispatch({ type: "RESET_MODAL" });
 
-            navigate("/schedule-event");
+            navigate("/schedule-event", {
+              state: { fromLogin: true },
+            });
           })
           .catch((err) => console.log(err));
       } else {

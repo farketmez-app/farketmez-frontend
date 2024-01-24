@@ -17,8 +17,6 @@ function SignupInterestSelection() {
       ids.push(selectedInterests[i].id);
     }
 
-    console.log(state.user.id)
-
     fetch(
       `http://localhost:8080/user-interests/${state.user.id}/setInterests`,
       {

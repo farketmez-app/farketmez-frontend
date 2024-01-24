@@ -14,8 +14,9 @@ import EventModalContent from "./components/event-modal-content/EventModalConten
 import SparksIcon from "../../assets/icons/sparks.svg";
 import ViewHeroImage from "../../assets/images/people-enjoying-hero.png";
 import DiscoverIcon from "../../assets/icons/discover.svg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import RateUnratedEventsModalContent from "../../components/rate-unrated-events-modal-content/RateUnratedEventsModalContent";
 
 /**
 const fakeFetchedData = {
@@ -35,6 +36,7 @@ const fakeFetchedData = {
  */
 
 function ScheduleEventPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { dispatch } = useContext(ModalContext);
   const { state } = useContext(AppContext);
@@ -54,16 +56,42 @@ function ScheduleEventPage() {
 
   // check if user has attended any event before
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/participants/by-user-id/${state.user.id}`
-    ).then((res) => {
-      if (res.status === 404) {
-        setUserHasAttendedEvents(false);
-        return null;
-      }
+    fetch(`http://localhost:8080/participants/by-user-id/${state.user.id}`)
+      .then((res) => {
+        if (res.status === 404) {
+          setUserHasAttendedEvents(false);
+          return null;
+        }
 
-      setUserHasAttendedEvents(true);
-    });
+        setUserHasAttendedEvents(true);
+        return res.json();
+      })
+      .then((events) => {
+        const staleUnratedEvents = events.filter((event) => {
+          return (
+            event.rating === null && new Date(event.event.date) < new Date()
+          );
+        });
+
+        if (location.state?.fromLogin) {
+          dispatch({ type: "TOGGLE_MODAL_VISIBILITY", payload: true });
+          dispatch({
+            type: "SET_MODAL_SHOULD_CLOSE_ON_OVERLAY_CLICK",
+            payload: true,
+          });
+          dispatch({
+            type: "SET_MODAL_TITLE",
+            payload: "Katıldığın Etkinlikleri Puanla 🌟",
+          });
+          dispatch({
+            type: "SET_MODAL_CONTENT",
+            payload: (
+              <RateUnratedEventsModalContent events={staleUnratedEvents} />
+            ),
+          });
+          dispatch({ type: "SET_MODAL_SHOULD_SHOW_LOGO", payload: false });
+        }
+      });
   }, [state.user.id]);
 
   useEffect(() => {
@@ -114,7 +142,7 @@ function ScheduleEventPage() {
 
       calendar.setAttribute("style", `border: 1px solid #ccc;`);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, value, view]);
 
   function handleFetchEvent() {
