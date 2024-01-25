@@ -14,7 +14,7 @@ const where = [
     name: "Mekanda",
     selected: false,
     image: MekandaImage,
-    code: "indoor",
+    code: "place",
   },
   {
     name: "Evde",

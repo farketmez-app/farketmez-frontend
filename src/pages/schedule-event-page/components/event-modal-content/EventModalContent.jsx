@@ -38,9 +38,11 @@ function EventModalContent({ event }) {
   const { dispatch } = useContext(ModalContext);
   const { state } = useContext(AppContext);
   const navigate = useNavigate();
-  const whereFormatted = event.where === "disarida" ? "Dışarıda" : "İçeride";
+  console.log(event)
+  const whereFormatted =
+    event.cost === "outdoor" ? "Dışarda" : event.cost === "home" ? "Evde" : "Mekanda";
   const costFormatted =
-    event.cost === "ucuz" ? "Ucuz" : event.cost === "orta" ? "Orta" : "Pahalı";
+    event.cost === "cheap" ? "Ucuz" : event.cost === "mid" ? "Orta" : "Pahalı";
 
   //TODO: Make real requests in the following two functions after attending an event is done on backend side.
   function handleAttendEvent() {
@@ -53,6 +55,8 @@ function EventModalContent({ event }) {
       .then((res) => res.status)
       .then((code) => {
         if (code === 201) {
+          dispatch({ type: "RESET_MODAL" });
+
           navigate("/attended-events");
         } else {
           console.log("hata", code);
